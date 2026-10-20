@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考研资料 · 全学科笔记总入口</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1E; --panel:#111A33; --panel2:#0E1530;
+    --signal:#4FE3C1; --data:#6C8CFF; --volt:#FFC857;
+    --paper:#E8EEFA; --muted:#93A3C6; --line:#263252; --lineb:#3A4A78;
+    --radius:14px; --shadow:0 18px 40px rgba(2,6,18,.45);
+    --fd:"Space Grotesk","Noto Sans SC",sans-serif;
+    --fb:"Noto Sans SC",system-ui,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--paper);font-family:var(--fb);font-size:16px;line-height:1.75;overflow-x:hidden}
+  ::selection{background:var(--signal);color:var(--bg)}
+  :focus-visible{outline:3px solid var(--signal);outline-offset:2px;border-radius:4px}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+
+  .topbar{position:sticky;top:0;z-index:60;background:rgba(10,15,30,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .topbar__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 0}
+  .brand{display:flex;align-items:center;gap:.7rem;font-family:var(--fd);font-weight:700;font-size:1.05rem}
+  .brand__dot{width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(79,227,193,.18),0 0 18px rgba(79,227,193,.8);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.82)}}
+  .brand em{font-style:normal;color:var(--muted);font-weight:400;font-size:.85rem}
+  .topbar__links{display:flex;gap:1.2rem;font-size:.9rem;font-weight:500}
+  .topbar__links a{color:var(--muted);transition:color .2s}
+  .topbar__links a:hover{color:var(--signal)}
+  .topbar__btn{font-family:var(--fd);font-weight:600;font-size:.9rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--lineb);color:var(--signal);transition:background .2s,border-color .2s,transform .15s}
+  .topbar__btn:hover{background:rgba(79,227,193,.08);border-color:var(--signal);transform:translateY(-1px)}
+
+  .hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+  .hero__content{position:relative;z-index:1;padding:5.5rem 0 4.5rem;max-width:820px}
+  .hero__kick{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.82rem;letter-spacing:.08em;color:var(--signal);border:1px solid rgba(79,227,193,.4);border-radius:999px;padding:.3rem .8rem;background:rgba(79,227,193,.06);margin-bottom:1.4rem}
+  .hero__kick i{width:7px;height:7px;border-radius:50%;background:var(--signal);display:inline-block;animation:pulse 2s infinite}
+  .hero__title{font-family:var(--fd);font-size:clamp(2.4rem,6.6vw,4.8rem);line-height:1.06;letter-spacing:-.02em;font-weight:700}
+  .hero__title span{color:var(--signal)}
+  .hero__sub{margin-top:1.2rem;font-size:clamp(1rem,2vw,1.15rem);color:var(--muted);max-width:64ch}
+  .hero__stats{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.2rem}
+  .stat{border:1px solid var(--lineb);border-radius:12px;background:rgba(17,26,51,.7);padding:.7rem 1.1rem;display:flex;flex-direction:column;min-width:120px}
+  .stat b{font-family:var(--fd);font-weight:700;font-size:1.5rem;color:var(--volt);line-height:1.1}
+  .stat span{font-size:.8rem;color:var(--muted)}
+
+  .section{padding:3rem 0 4.5rem}
+  .section__head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.6rem}
+  .section__num{font-family:var(--fd);font-weight:700;font-size:1.05rem;color:var(--signal);border:1px solid rgba(79,227,193,.45);border-radius:8px;padding:.15rem .55rem;white-space:nowrap}
+  .section__title{font-family:var(--fd);font-weight:700;font-size:clamp(1.4rem,3.2vw,1.9rem);letter-spacing:-.01em}
+  .section__rule{border:none;border-top:1px solid var(--line);margin-bottom:1.8rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.1rem}
+  .subject{position:relative;display:flex;flex-direction:column;gap:.7rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:1.5rem 1.4rem 1.4rem;overflow:hidden;transition:border-color .2s,transform .18s,box-shadow .25s}
+  .subject::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,var(--signal));opacity:.85}
+  .subject:hover{border-color:var(--lineb);transform:translateY(-3px);box-shadow:var(--shadow)}
+  .subject--math{--accent:#4FE3C1}
+  .subject--ds{--accent:#6C8CFF}
+  .subject--os{--accent:#FFC857}
+  .subject--eng{--accent:#FF7EB6}
+  .subject--co{--accent:#B79CFF}
+  .subject--net{--accent:#5AC8FA}
+  .subject__top{display:flex;align-items:center;justify-content:space-between;gap:.8rem}
+  .subject__tag{font-family:var(--fm);font-size:.75rem;letter-spacing:.06em;color:var(--accent);border:1px solid var(--lineb);border-radius:6px;padding:.15rem .5rem}
+  .subject__go{font-family:var(--fd);font-weight:600;font-size:.85rem;color:var(--accent);opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s}
+  .subject:hover .subject__go{opacity:1;transform:none}
+  .subject h3{font-family:var(--fd);font-weight:700;font-size:1.35rem;letter-spacing:-.01em}
+  .subject h3 small{display:block;font-family:var(--fm);font-size:.78rem;font-weight:400;color:var(--muted);letter-spacing:.05em;margin-top:.15rem}
+  .subject p{font-size:.92rem;color:var(--muted);flex:1}
+  .subject ul{margin-top:.35rem;padding-left:0;list-style:none;display:flex;flex-wrap:wrap;gap:.45rem}
+  .subject ul li{font-family:var(--fm);font-size:.76rem;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:.18rem .55rem;background:rgba(14,21,48,.6)}
+
+  .footer{border-top:1px solid var(--line);padding:1.6rem 0;text-align:center;font-size:.85rem;color:var(--muted)}
+  .footer .fd{font-family:var(--fd)}
+
+  @media (max-width:640px){
+    .wrap{width:calc(100% - 28px)}
+    .grid{grid-template-columns:1fr}
+    .hero__content{padding:3.4rem 0 3rem}
+    .subject__go{opacity:1;transform:none}
+    .topbar__links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <div class="brand"><span class="brand__dot"></span>EXAM VAULT <em>考研资料总入口</em></div>
+    <nav class="topbar__links">
+      <a href="#subjects">学科笔记</a>
+    </nav>
+    <a class="topbar__btn" href="#subjects">开始复习</a>
+  </div>
+</header>
+
+<section class="hero">
+  <canvas class="hero__canvas" id="fx"></canvas>
+  <div class="wrap hero__content">
+    <div class="hero__kick"><i></i>ALL-IN-ONE · 笨笨の狗</div>
+    <h1 class="hero__title">考研<span>资料</span>中心</h1>
+    <p class="hero__sub">六门核心科目 · 知识点全梳理 + 考研真题复盘。每份笔记均为单文件 HTML，零依赖、免联网加载，手机电脑都能顺畅阅读。</p>
+    <div class="hero__stats">
+      <div class="stat"><b>6</b><span>门学科</span></div>
+      <div class="stat"><b>单文件</b><span>零依赖离线</span></div>
+      <div class="stat"><b>真题</b><span>章末实战复盘</span></div>
+      <div class="stat"><b>移动端</b><span>响应式适配</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="subjects">
+  <div class="wrap">
+    <div class="section__head">
+      <span class="section__num">01</span>
+      <h2 class="section__title">学科笔记</h2>
+    </div>
+    <hr class="section__rule">
+
+    <div class="grid">
+
+      <a class="subject subject--math" href="math-notes.html">
+        <div class="subject__top">
+          <span class="subject__tag">MATH</span>
+          <span class="subject__go">进入 →</span>
+        </div>
+        <h3>数学一<small>MATH NOTES</small></h3>
+        <p>高等数学 · 线性代数 · 概率论与数理统计，核心考点全梳理，每章配考研真题。</p>
+        <ul><li>高数</li><li>线代</li><li>概率</li><li>真题</li></ul>
+      </a>
+
+      <a class="subject subject--ds" href="ds-notes.html">
+        <div class="subject__top">
+          <span class="subject__tag">DATA STRUCTURE</span>
+          <span class="subject__go">进入 →</span>
+        </div>
+        <h3>数据结构<small>DS NOTES</small></h3>
+        <p>线性表、树、图、查找与排序，从原理到代码思路，配合真题巩固。</p>
+        <ul><li>线性表</li><li>树</li><li>图</li><li>查找排序</li></ul>
+      </a>
+
+      <a class="subject subject--os" href="os-notes.html">
+        <div class="subject__top">
+          <span class="subject__tag">OPERATING SYSTEM</span>
+          <span class="subject__go">进入 →</span>
+        </div>
+        <h3>操作系统<small>OS NOTES</small></h3>
+        <p>进程与线程、内存管理、文件系统、I/O 与死锁，高频考点逐个击破。</p>
+        <ul><li>进程</li><li>内存</li><li>文件</li><li>死锁</li></ul>
+      </a>
+
+      <a class="subject subject--eng" href="eng-notes.html">
+        <div class="subject__top">
+          <span class="subject__tag">ENGLISH</span>
+          <span class="subject__go">进入 →</span>
+        </div>
+        <h3>英语<small>ENG NOTES</small></h3>
+        <p>词汇、长难句、阅读、写作与翻译方法论，应试技巧 + 真题演练。</p>
+        <ul><li>词汇</li><li>长难句</li><li>阅读</li><li>写作</li></ul>
+      </a>
+
+      <a class="subject subject--co" href="co-notes.html">
+        <div class="subject__top">
+          <span class="subject__tag">COMPUTER ORGANIZATION</span>
+          <span class="subject__go">进入 →</span>
+        </div>
+        <h3>计算机组成原理<small>CO NOTES</small></h3>
+        <p>数据表示、CPU、存储系统、指令系统与 I/O，硬核知识点 + 真题复盘。</p>
+        <ul><li>数据表示</li><li>CPU</li><li>存储</li><li>指令</li></ul>
+      </a>
+
+      <a class="subject subject--net" href="net-notes.html">
+        <div class="subject__top">
+          <span class="subject__tag">COMPUTER NETWORK</span>
+          <span class="subject__go">进入 →</span>
+        </div>
+        <h3>计算机网络<small>NET NOTES</small></h3>
+        <p>分层体系、网络层、传输层、应用层与网络安全，八章全梳理 + 真题演练。</p>
+        <ul><li>分层体系</li><li>网络层</li><li>传输层</li><li>安全</li></ul>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <span class="fd">EXAM VAULT</span> · 考研资料中心 · 一鼓作气，一战成硕
+  </div>
+</footer>
+
+<script>
+(function(){
+  var cv = document.getElementById('fx');
+  var ctx = cv.getContext('2d');
+  var W, H, DPR;
+  function size(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  size();
+  var parts = [], count = 70;
+  function init(){
+    parts.length = 0;
+    for(var i=0;i<count;i++){
+      parts.push({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        vx: (Math.random()-.5)*.35,
+        vy: (Math.random()-.5)*.35,
+        r: Math.random()*1.8 + .6
+      });
+    }
+  }
+  init();
+  var colors = ['#4FE3C1','#6C8CFF','#FFC857'];
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    var i, j, p, q, d;
+    for(i=0;i<parts.length;i++){
+      p = parts[i];
+      p.x += p.vx; p.y += p.vy;
+      if(p.x < -10) p.x = W+10; if(p.x > W+10) p.x = -10;
+      if(p.y < -10) p.y = H+10; if(p.y > H+10) p.y = -10;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = colors[i % 3];
+      ctx.globalAlpha = .55;
+      ctx.fill();
+    }
+    for(i=0;i<parts.length;i++){
+      for(j=i+1;j<parts.length;j++){
+        p = parts[i]; q = parts[j];
+        d = Math.hypot(p.x-q.x, p.y-q.y);
+        if(d < 120){
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = colors[i % 3];
+          ctx.globalAlpha = (1 - d/120) * .16;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  }
+  tick();
+  var t;
+  window.addEventListener('resize', function(){
+    clearTimeout(t);
+    t = setTimeout(function(){ size(); init(); }, 160);
+  });
+})();
+</script>
+</body>
+</html>

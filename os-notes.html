@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>操作系统知识点全梳理 · OS NOTES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#140F22; --panel:#201733; --panel2:#190F2A;
+    --signal:#FFC857; --data:#7FD8FF; --volt:#FFB86C;
+    --paper:#F0EAF8; --muted:#A79AC2; --line:#32264D; --lineb:#4A3A6E;
+    --radius:14px; --shadow:0 18px 40px rgba(8,3,16,.5);
+    --fd:"Space Grotesk","Noto Sans SC",sans-serif;
+    --fb:"Noto Sans SC",system-ui,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{background:var(--bg);color:var(--paper);font-family:var(--fb);font-size:16px;line-height:1.75;overflow-x:hidden}
+  ::selection{background:var(--signal);color:var(--bg)}
+  :focus-visible{outline:3px solid var(--signal);outline-offset:2px;border-radius:4px}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+
+  .topbar{position:sticky;top:0;z-index:60;background:rgba(20,15,34,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .topbar__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 0}
+  .brand{display:flex;align-items:center;gap:.7rem;font-family:var(--fd);font-weight:700;font-size:1.05rem}
+  .brand__dot{width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(255,200,87,.18),0 0 18px rgba(255,200,87,.8);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.82)}}
+  .brand em{font-style:normal;color:var(--muted);font-weight:400;font-size:.85rem}
+  .topbar__links{display:flex;gap:1.2rem;font-size:.9rem;font-weight:500}
+  .topbar__links a{color:var(--muted);transition:color .2s}
+  .topbar__links a:hover{color:var(--signal)}
+  .topbar__btn{font-family:var(--fd);font-weight:600;font-size:.9rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--lineb);color:var(--signal);transition:background .2s,border-color .2s,transform .15s}
+  .topbar__btn:hover{background:rgba(255,200,87,.08);border-color:var(--signal);transform:translateY(-1px)}
+
+  .hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+  .hero__content{position:relative;z-index:1;padding:5.5rem 0 4.5rem;max-width:800px}
+  .hero__kick{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.82rem;letter-spacing:.08em;color:var(--signal);border:1px solid rgba(255,200,87,.4);border-radius:999px;padding:.3rem .8rem;background:rgba(255,200,87,.06);margin-bottom:1.4rem}
+  .hero__kick i{width:7px;height:7px;border-radius:50%;background:var(--signal);display:inline-block;animation:pulse 2s infinite}
+  .hero__title{font-family:var(--fd);font-size:clamp(2.3rem,6.4vw,4.6rem);line-height:1.08;letter-spacing:-.02em;font-weight:700}
+  .hero__title span{color:var(--signal)}
+  .hero__sub{margin-top:1.2rem;font-size:clamp(1rem,2vw,1.15rem);color:var(--muted);max-width:62ch}
+  .hero__stats{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.2rem}
+  .stat{border:1px solid var(--lineb);border-radius:12px;background:rgba(32,23,51,.7);padding:.7rem 1.1rem;display:flex;flex-direction:column;min-width:120px}
+  .stat b{font-family:var(--fd);font-weight:700;font-size:1.5rem;color:var(--volt);line-height:1.1}
+  .stat span{font-size:.8rem;color:var(--muted)}
+
+  .layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:2.4rem;padding:2.8rem 0 4rem}
+  .toc{position:sticky;top:92px;align-self:start;border:1px solid var(--line);border-radius:var(--radius);background:rgba(32,23,51,.55);padding:1rem 0;max-height:calc(100vh - 120px);overflow-y:auto}
+  .toc__title{font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--muted);padding:0 1.2rem .8rem;border-bottom:1px solid var(--line);margin-bottom:.6rem}
+  .toc a{display:flex;align-items:center;gap:.65rem;padding:.45rem 1.2rem;font-size:.9rem;font-weight:500;color:var(--muted);border-left:3px solid transparent;transition:color .18s,border-color .18s,background .18s}
+  .toc a .toc__n{font-family:var(--fm);font-size:.75rem;color:var(--lineb)}
+  .toc a:hover{color:var(--paper);background:rgba(255,200,87,.05)}
+  .toc a.active{color:var(--signal);border-left-color:var(--signal);background:rgba(255,200,87,.07)}
+  .toc a.active .toc__n{color:var(--signal)}
+  .content{min-width:0}
+  .content section{scroll-margin-top:96px}
+
+  .chapter{margin-bottom:3.6rem}
+  .chapter__head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.4rem}
+  .chapter__num{font-family:var(--fd);font-weight:700;font-size:1.05rem;color:var(--signal);border:1px solid rgba(255,200,87,.45);border-radius:8px;padding:.15rem .55rem;white-space:nowrap}
+  .chapter__title{font-family:var(--fd);font-weight:700;font-size:clamp(1.5rem,3.6vw,2.2rem);letter-spacing:-.01em}
+  .chapter__lede{color:var(--muted);font-size:.98rem;max-width:72ch;margin-bottom:1.6rem}
+  .chapter__rule{border:none;border-top:1px solid var(--line);margin:0 0 1.6rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem}
+  .card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:1.2rem 1.3rem;transition:border-color .2s,transform .18s,box-shadow .25s}
+  .card:hover{border-color:var(--lineb);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .card h4{font-family:var(--fd);font-weight:600;font-size:1.05rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+  .card h4::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--signal);flex-shrink:0}
+  .card--data h4::before{background:var(--data)}
+  .card--volt h4::before{background:var(--volt)}
+  .card p{font-size:.92rem;color:var(--muted)}
+  .card p strong{color:var(--paper);font-weight:500}
+  .card ul{margin-top:.6rem;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:.35rem}
+  .card li{font-size:.9rem;color:var(--muted);position:relative;padding-left:1.1rem}
+  .card li::before{content:"▹";position:absolute;left:0;color:var(--signal)}
+  .card--data li::before{color:var(--data)}
+
+  .term{font-family:var(--fm);font-size:.88em;color:var(--signal);background:rgba(255,200,87,.08);border:1px solid rgba(255,200,87,.25);border-radius:6px;padding:.02em .4em;white-space:nowrap}
+  .term--data{color:var(--data);background:rgba(127,216,255,.08);border-color:rgba(127,216,255,.28)}
+  .term--volt{color:var(--volt);background:rgba(255,184,108,.08);border-color:rgba(255,184,108,.28)}
+  .note{border:1px solid var(--lineb);border-left:4px solid var(--volt);border-radius:10px;background:rgba(255,184,108,.05);padding:.9rem 1.1rem;font-size:.92rem;color:var(--muted);margin:1.2rem 0}
+  .note strong{color:var(--volt);font-weight:600}
+
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);margin:1.2rem 0}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+  thead th{background:var(--panel2);font-family:var(--fd);font-weight:600;text-align:left;padding:.8rem 1rem;color:var(--paper);font-size:.88rem;border-bottom:1px solid var(--lineb);white-space:nowrap}
+  tbody td{padding:.7rem 1rem;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(255,200,87,.035)}
+  tbody td:first-child{color:var(--signal);font-family:var(--fm);font-size:.85rem;white-space:nowrap}
+  tbody td strong{color:var(--paper);font-weight:500}
+
+  .fact{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin:1.2rem 0}
+  .fact__item{border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;background:rgba(32,23,51,.45)}
+  .fact__item b{display:block;font-family:var(--fd);font-weight:700;font-size:1.35rem;color:var(--volt);line-height:1.2;margin-bottom:.3rem}
+  .fact__item span{font-size:.86rem;color:var(--muted)}
+
+  .exam{border:1px solid rgba(255,184,108,.32);border-left:4px solid var(--volt);border-radius:var(--radius);background:rgba(255,184,108,.05);padding:1.1rem 1.2rem;margin-top:1.7rem}
+  .exam__head{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+  .exam__tag{font-family:var(--fd);font-weight:700;font-size:.76rem;letter-spacing:.1em;color:var(--bg);background:var(--volt);border-radius:6px;padding:.14rem .55rem;white-space:nowrap}
+  .exam__title{font-family:var(--fd);font-weight:600;font-size:.92rem;color:var(--volt)}
+  .exam__item{border:1px solid var(--line);border-radius:10px;background:rgba(32,23,51,.6);padding:.85rem 1rem;margin-top:.65rem}
+  .exam__q{font-size:.9rem;color:var(--paper);margin-bottom:.35rem}
+  .exam__q b{color:var(--volt);font-weight:600}
+  .exam__a{font-size:.87rem;color:var(--muted)}
+  .exam__a strong{color:var(--signal);font-weight:600}
+
+  .footer{border-top:1px solid var(--line);background:var(--panel2)}
+  .footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.6rem 0 2rem;font-size:.85rem;color:var(--muted)}
+  .footer__brand{font-family:var(--fd);color:var(--signal);font-weight:600}
+
+  .totop{position:fixed;right:22px;bottom:22px;z-index:70;width:46px;height:46px;border-radius:12px;border:1px solid var(--lineb);background:var(--panel);color:var(--signal);font-size:1.2rem;cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s,background .2s,border-color .2s;box-shadow:var(--shadow)}
+  .totop.show{opacity:1;transform:none;pointer-events:auto}
+  .totop:hover{background:var(--signal);color:var(--bg);border-color:var(--signal)}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .mnav{display:none}
+  @media(max-width:920px){
+    .layout{grid-template-columns:1fr}
+    .toc{position:static;max-height:none;margin-bottom:1.4rem}
+    .toc__list{display:grid;grid-template-columns:1fr 1fr;gap:.1rem}
+    .topbar__links{display:none}
+    .mnav{display:inline-flex}
+    .hero__content{padding:3.6rem 0 3rem}
+  }
+  @media(max-width:560px){
+    .wrap{width:calc(100% - 28px)}
+    .toc__list{grid-template-columns:1fr}
+    .hero__stats{gap:.6rem}
+    .stat{min-width:104px;padding:.6rem .8rem}
+    .stat b{font-size:1.25rem}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .brand__dot,.hero__kick i{animation:none}
+    .reveal{opacity:1;transform:none;transition:none}
+    .card,.totop,.topbar__btn{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#top"><span class="brand__dot"></span> OS NOTES <em>操作系统知识全梳理</em></a>
+    <nav class="topbar__links" aria-label="快捷导航">
+      <a href="#ch1">概述</a><a href="#ch2">进程</a><a href="#ch3">内存</a><a href="#ch4">文件</a><a href="#ch5">IO</a>
+    </nav>
+    <a class="topbar__btn mnav" href="#toc">目录</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <canvas class="hero__canvas" id="osCanvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero__content">
+      <span class="hero__kick"><i></i> 单文件 · 零依赖 · 可离线阅读</span>
+      <h1 class="hero__title">操作系统<span>全量考点</span>：进程·内存·文件·IO一张通</h1>
+      <p class="hero__sub">按 408 考纲主线整理五章全量知识点：系统概述、进程管理、内存管理、文件管理、输入输出管理。章末附考研真题。</p>
+      <div class="hero__stats">
+        <div class="stat"><b>5</b><span>知识章节</span></div>
+        <div class="stat"><b>4</b><span>资源管理</span></div>
+        <div class="stat"><b>35</b><span>考纲分值</span></div>
+        <div class="stat"><b>∞</b><span>调度循环</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="layout">
+
+    <aside class="toc" id="toc">
+      <p class="toc__title">章节目录</p>
+      <div class="toc__list">
+        <a href="#ch1"><span class="toc__n">01</span> 操作系统概述</a>
+        <a href="#ch2"><span class="toc__n">02</span> 进程与线程</a>
+        <a href="#ch3"><span class="toc__n">03</span> 内存管理</a>
+        <a href="#ch4"><span class="toc__n">04</span> 文件管理</a>
+        <a href="#ch5"><span class="toc__n">05</span> 输入输出管理</a>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- 01 -->
+      <section class="chapter reveal" id="ch1">
+        <div class="chapter__head"><span class="chapter__num">01</span><h2 class="chapter__title">操作系统概述</h2></div>
+        <p class="chapter__lede">OS 是管理硬件资源、提供用户接口、协调多任务的核心系统软件。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>功能与特征</h4>
+            <ul>
+              <li>四大功能：处理机管理、存储器管理、设备管理、文件管理</li>
+              <li>两大接口：命令接口（联机/脱机）、程序接口（系统调用）</li>
+              <li>四大特征：<span class="term">并发</span>、共享、虚拟、异步</li>
+              <li>并发与并行的区别：宏观同时 vs 微观同时</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>发展与运行环境</h4>
+            <ul>
+              <li>发展：手工→批处理→分时→实时→网络/分布式</li>
+              <li><span class="term">内核态/用户态</span>：特权指令只能在核心态执行</li>
+              <li>中断与异常：内中断（异常）vs 外中断（中断）</li>
+              <li>系统调用：用户程序请求内核服务的唯一途径</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>体系结构</h4>
+            <ul>
+              <li>大内核：Linux、Unix，性能高但内核庞大</li>
+              <li>微内核：Windows NT 部分设计，模块化、可靠性高</li>
+              <li>宏内核/微内核/混合内核对比是常考点</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>「并发、共享」是 OS 最基本的两个特征，两者互为存在条件。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>操作系统的主要特征包括？</p><p class="exam__a"><strong>答案：并发、共享、虚拟、异步。</strong>其中并发与共享是最基本特征，虚拟与异步由前两者派生。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>用户程序请求操作系统服务需要用到？</p><p class="exam__a"><strong>答案：系统调用。</strong>系统调用是用户态进入内核态、请求内核服务的程序接口。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>中断和异常有什么区别？</p><p class="exam__a"><strong>答案：</strong>异常（内中断）由 CPU 执行指令时内部事件引起（如缺页、除零）；中断（外中断）由外部设备等异步事件引起（如 I/O 完成、时钟）。</p></div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="chapter reveal" id="ch2">
+        <div class="chapter__head"><span class="chapter__num">02</span><h2 class="chapter__title">进程与线程</h2></div>
+        <p class="chapter__lede">进程是资源分配单位，线程是 CPU 调度单位；同步互斥与死锁是重头戏。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>进程基础</h4>
+            <ul>
+              <li>PCB（进程控制块）是进程存在的唯一标志</li>
+              <li>三态模型：运行、就绪、阻塞；挂起/唤醒</li>
+              <li>进程创建、终止、阻塞、唤醒原语</li>
+              <li><span class="term">线程</span>：同一进程内线程共享地址空间与资源</li>
+              <li>进程与线程对比：资源分配 vs 调度单位</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>处理机调度</h4>
+            <ul>
+              <li>调度层次：高级（作业）、中级（内存）、低级（进程）</li>
+              <li><span class="term">FCFS</span>：先来先服务，利于长作业</li>
+              <li><span class="term">SJF/SPF</span>：短作业优先，平均等待最短，可能饥饿</li>
+              <li><span class="term">优先级调度</span>、<span class="term">时间片轮转 RR</span>、多级反馈队列</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>同步与互斥</h4>
+            <ul>
+              <li>临界资源、临界区；同步（前驱关系）vs 互斥（竞争）</li>
+              <li><span class="term">信号量机制</span>：P（wait）减一、V（signal）加一，整型/记录型</li>
+              <li>经典问题：生产者-消费者、读者-写者、哲学家进餐</li>
+              <li><span class="term">管程</span>：封装共享资源，条件变量</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>死锁</h4>
+            <ul>
+              <li>必要条件：互斥、占有并等待、不可剥夺、循环等待</li>
+              <li>预防：破坏必要条件之一（如一次性申请所有资源）</li>
+              <li>避免：<span class="term">银行家算法</span>（安全性检查）</li>
+              <li>检测与解除：资源分配图、剥夺/回滚/终止进程</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>P 申请资源前检查、V 释放资源后唤醒；死锁四条件中只有「互斥」无法被破坏。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>进程和线程的关系，下列说法正确的是？</p><p class="exam__a"><strong>答案：进程是资源分配的基本单位，线程是处理机调度的基本单位。</strong>同一进程的多线程共享进程资源，线程切换开销小于进程切换。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>产生死锁的四个必要条件是？</p><p class="exam__a"><strong>答案：互斥、占有并等待、不可剥夺、循环等待。</strong>四个条件必须同时满足才可能死锁。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>记录型信号量中 wait(S) 操作的过程是什么？</p><p class="exam__a"><strong>答案：</strong>S.value--；若 S.value&lt;0 则进程阻塞并加入 S 的等待队列；signal 时 S.value++，若 ≤0 则唤醒队首进程。</p></div>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="chapter reveal" id="ch3">
+        <div class="chapter__head"><span class="chapter__num">03</span><h2 class="chapter__title">内存管理</h2></div>
+        <p class="chapter__lede">从连续分配到分页分段，再到虚拟内存与页面置换算法。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>连续分配与覆盖交换</h4>
+            <ul>
+              <li>单一连续、固定分区、动态分区分配</li>
+              <li>动态分区算法：首次适应、最佳适应、最坏适应、邻近适应</li>
+              <li>外部碎片与紧凑（拼接）；内部碎片</li>
+              <li>覆盖技术与交换技术（对换）</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>分页与分段</h4>
+            <ul>
+              <li><span class="term">基本分页</span>：固定大小页框，逻辑地址 = 页号 + 页内偏移</li>
+              <li>页表：页号→页框号映射；两级/多级页表</li>
+              <li><span class="term">基本分段</span>：按逻辑意义分段，段表 + 段内偏移</li>
+              <li>分页无外部碎片有内部碎片；分段相反</li>
+              <li>段页式：先段后页</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>虚拟内存</h4>
+            <ul>
+              <li>局部性原理：时间局部性、空间局部性</li>
+              <li>请求分页：缺页中断、页面置换</li>
+              <li>地址变换：快表 TLB 加速查找</li>
+              <li>有效访问时间与缺页率的关系</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>页面置换算法</h4>
+            <ul>
+              <li><span class="term">OPT</span>：最佳置换（理论，淘汰未来最久不用）</li>
+              <li><span class="term">FIFO</span>：先进先出，可能 Belady 异常</li>
+              <li><span class="term">LRU</span>：最近最久未使用（栈实现），性能好开销大</li>
+              <li><span class="term">CLOCK</span>（时钟/二次机会）：近似 LRU，访问位标记</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>LRU 靠历史预测未来，OPT 是上帝视角；FIFO 淘汰最老页面，Belady 异常只在 FIFO 出现。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>某系统采用请求分页，缺页时需 100ns 处理，内存访问 10ns，缺页率 0.1，求有效访问时间。</p><p class="exam__a"><strong>答案：EAT = (1−p)×10 + p×(100+10) ≈ 10 + 0.1×100 = 20ns。</strong>按公式 EAT=(1−p)·t_m + p·t_缺页计算。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>可能发生 Belady 异常的页面置换算法是？</p><p class="exam__a"><strong>答案：FIFO。</strong>增加物理块数反而使缺页次数增加的异常现象只出现在 FIFO 等非栈式算法中，LRU/OPT 为栈式算法不会出现。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>虚拟存储器实现的理论基础是什么？</p><p class="exam__a"><strong>答案：局部性原理。</strong>程序运行具有时间与空间局部性，只需调入正在使用的部分页面即可运行，配合请求调入与置换实现大地址空间。</p></div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="chapter reveal" id="ch4">
+        <div class="chapter__head"><span class="chapter__num">04</span><h2 class="chapter__title">文件管理</h2></div>
+        <p class="chapter__lede">文件逻辑结构、物理分配、目录结构、磁盘调度与文件系统。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>文件与目录</h4>
+            <ul>
+              <li>文件属性：名称、类型、大小、权限、时间</li>
+              <li>逻辑结构：顺序文件、索引文件、索引顺序文件</li>
+              <li>目录结构：单级、两级、树形（当前主流）</li>
+              <li>文件控制块 FCB 与索引结点 i-node</li>
+              <li>文件共享：硬链接、软链接（符号链接）</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>物理分配方式</h4>
+            <ul>
+              <li><span class="term">连续分配</span>：顺序存取快，有外部碎片、不易扩展</li>
+              <li><span class="term">链接分配</span>：隐式链接（FAT 表）/ 显式链接</li>
+              <li><span class="term">索引分配</span>：索引块指向数据块，支持随机存取</li>
+              <li>多级索引、混合索引（Unix 的 direct+间接）</li>
+              <li>文件存储空间管理：空闲表、空闲链表、位示图、成组链接</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>磁盘管理</h4>
+            <ul>
+              <li>磁盘结构：磁道、扇区、柱面；磁盘访问时间 = 寻道+旋转+传输</li>
+              <li>调度算法：<span class="term">FCFS</span>、<span class="term">SSTF</span>（最短寻道）、<span class="term">SCAN</span>（电梯）、C-SCAN</li>
+              <li>磁盘格式化与坏块处理</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>SSTF 易饥饿，SCAN 双向扫描，C-SCAN 单向扫描；计算磁道移动量是高频计算题。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>适合随机存取且便于文件动态扩展的物理分配方式是？</p><p class="exam__a"><strong>答案：索引分配。</strong>索引块集中管理数据块地址，随机存取 O(1) 定位，扩展只需增加索引项。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>磁盘访问时间由哪三部分组成？</p><p class="exam__a"><strong>答案：寻道时间、旋转延迟时间、传输时间。</strong>三者之和为总访问时间，其中寻道时间占比通常最大。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>SCAN（电梯）调度算法的特点是？</p><p class="exam__a"><strong>答案：磁头沿一个方向移动并服务途经请求，到边界后反向。</strong>类似电梯运行，兼顾公平与效率。</p></div>
+        </div>
+      </section>
+
+      <!-- 05 -->
+      <section class="chapter reveal" id="ch5">
+        <div class="chapter__head"><span class="chapter__num">05</span><h2 class="chapter__title">输入输出管理</h2></div>
+        <p class="chapter__lede">I/O 控制方式、缓冲、设备分配与 SPOOLing 技术。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>I/O 设备与控制方式</h4>
+            <ul>
+              <li>设备分类：块设备（磁盘）、字符设备（键盘）、网络设备</li>
+              <li><span class="term">程序直接控制</span>：轮询，CPU 忙等</li>
+              <li><span class="term">中断驱动</span>：CPU 等待中断，改进轮询</li>
+              <li><span class="term">DMA</span>：数据块直接在主存与设备间传送</li>
+              <li><span class="term">通道</span>：独立执行 I/O 指令的处理机</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>缓冲技术</h4>
+            <ul>
+              <li>作用：缓和 CPU 与 I/O 速度不匹配、减少中断次数、提高并行性</li>
+              <li>单缓冲、双缓冲、循环缓冲、缓冲池</li>
+              <li>缓冲区数据传送时间计算是常考点</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>设备分配与 SPOOLing</h4>
+            <ul>
+              <li>设备独立性：逻辑设备名映射到物理设备</li>
+              <li>设备分配数据结构：DCT、COCT、CHCT、SDT</li>
+              <li><span class="term">SPOOLing（假脱机）</span>：输入井/输出井 + 缓冲 + 调度程序</li>
+              <li>SPOOLing 将独占设备改造为共享设备（如共享打印机）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>I/O 控制方式按 CPU 介入程度排序：程序控制 &gt; 中断 &gt; DMA &gt; 通道。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>DMA 方式与中断方式相比，主要优点是？</p><p class="exam__a"><strong>答案：数据传送不需要 CPU 逐字干预。</strong>DMA 控制器直接完成主存与设备间的成块数据传送，仅在开始/结束时打断 CPU。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>SPOOLing 技术如何将独占设备变为共享设备？</p><p class="exam__a"><strong>答案：</strong>利用输入井/输出井在磁盘上暂存数据，通过调度程序排队处理，多个进程可同时提交 I/O 请求，从而逻辑上共享独占设备。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>缓冲技术的主要作用不包括？</p><p class="exam__a"><strong>答案：增大磁盘容量（错误选项）。</strong>缓冲用于缓和速度不匹配、减少中断次数、提高并行性，与存储容量无关。</p></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span class="footer__brand">OS NOTES</span>
+    <span>操作系统知识点全梳理 </span>
+    <span>调度即秩序，同步即和谐</span>
+  </div>
+</footer>
+
+<button class="totop" id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('osCanvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, cores = [];
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function seed(){
+    var count = Math.max(4, Math.round(W / 190));
+    cores = [];
+    for(var i=0;i<count;i++){ cores.push({x:Math.random()*W, y:Math.random()*H, r:18+Math.random()*22, ph:Math.random()*Math.PI*2, sp:.6+Math.random()*1.4}); }
+  }
+  function resize(){
+    var rect = canvas.parentElement.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+  }
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    var i;
+    for(i=0;i<cores.length;i++){
+      var c=cores[i];
+      ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,200,87,.10)'; ctx.fill();
+      ctx.strokeStyle='rgba(127,216,255,.5)'; ctx.lineWidth=1.5; ctx.stroke();
+      var ang = (t/900)*c.sp + c.ph;
+      for(var k=0;k<3;k++){
+        var a = ang + k*Math.PI*2/3;
+        var px = c.x + Math.cos(a)*c.r, py = c.y + Math.sin(a)*c.r;
+        var ox = c.x + Math.cos(a)*(c.r+14), oy = c.y + Math.sin(a)*(c.r+14);
+        ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(ox,oy);
+        ctx.strokeStyle='rgba(255,184,108,.55)'; ctx.lineWidth=2; ctx.stroke();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  if(!reduce){ resize(); window.addEventListener('resize', resize); requestAnimationFrame(draw); }
+  else {
+    var rect=canvas.parentElement.getBoundingClientRect();
+    W=rect.width; H=rect.height;
+    canvas.width=W*DPR; canvas.height=H*DPR;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+    for(var i=0;i<cores.length;i++){ var c=cores[i]; ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,Math.PI*2); ctx.fillStyle='rgba(255,200,87,.10)'; ctx.fill(); ctx.strokeStyle='rgba(127,216,255,.5)'; ctx.lineWidth=1.5; ctx.stroke(); }
+  }
+
+  var tocLinks = document.querySelectorAll('.toc a');
+  var sections = [];
+  tocLinks.forEach(function(a){ sections.push(document.querySelector(a.getAttribute('href'))); });
+  var toTop = document.getElementById('toTop');
+  var ticking = false;
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(function(){
+        ticking = false;
+        var pos = window.scrollY + 120;
+        var current = sections[0];
+        sections.forEach(function(s){ if(s.offsetTop <= pos) current = s; });
+        tocLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current.id); });
+        toTop.classList.toggle('show', window.scrollY > 600);
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: reduce?'auto':'smooth'}); });
+  onScroll();
+
+  var reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.08});
+    reveals.forEach(function(el){ io.observe(el); });
+  } else { reveals.forEach(function(el){ el.classList.add('in'); }); }
+})();
+</script>
+</body>
+</html>

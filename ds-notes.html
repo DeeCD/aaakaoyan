@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据结构知识点全梳理 · DS NOTES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07120F; --panel:#0E1F19; --panel2:#0A1813;
+    --signal:#6C8CFF; --data:#5AD1E0; --volt:#FFC857;
+    --paper:#E4F4EC; --muted:#8FB0A2; --line:#1C3B2E; --lineb:#2C5543;
+    --radius:14px; --shadow:0 18px 40px rgba(2,10,7,.5);
+    --fd:"Space Grotesk","Noto Sans SC",sans-serif;
+    --fb:"Noto Sans SC",system-ui,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{background:var(--bg);color:var(--paper);font-family:var(--fb);font-size:16px;line-height:1.75;overflow-x:hidden}
+  ::selection{background:var(--signal);color:var(--bg)}
+  :focus-visible{outline:3px solid var(--signal);outline-offset:2px;border-radius:4px}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+
+  .topbar{position:sticky;top:0;z-index:60;background:rgba(7,18,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .topbar__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 0}
+  .brand{display:flex;align-items:center;gap:.7rem;font-family:var(--fd);font-weight:700;font-size:1.05rem}
+  .brand__dot{width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(108,140,255,.18),0 0 18px rgba(108,140,255,.8);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.82)}}
+  .brand em{font-style:normal;color:var(--muted);font-weight:400;font-size:.85rem}
+  .topbar__links{display:flex;gap:1.2rem;font-size:.9rem;font-weight:500}
+  .topbar__links a{color:var(--muted);transition:color .2s}
+  .topbar__links a:hover{color:var(--signal)}
+  .topbar__btn{font-family:var(--fd);font-weight:600;font-size:.9rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--lineb);color:var(--signal);transition:background .2s,border-color .2s,transform .15s}
+  .topbar__btn:hover{background:rgba(108,140,255,.08);border-color:var(--signal);transform:translateY(-1px)}
+
+  .hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+  .hero__content{position:relative;z-index:1;padding:5.5rem 0 4.5rem;max-width:800px}
+  .hero__kick{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.82rem;letter-spacing:.08em;color:var(--signal);border:1px solid rgba(108,140,255,.4);border-radius:999px;padding:.3rem .8rem;background:rgba(108,140,255,.06);margin-bottom:1.4rem}
+  .hero__kick i{width:7px;height:7px;border-radius:50%;background:var(--signal);display:inline-block;animation:pulse 2s infinite}
+  .hero__title{font-family:var(--fd);font-size:clamp(2.3rem,6.4vw,4.6rem);line-height:1.08;letter-spacing:-.02em;font-weight:700}
+  .hero__title span{color:var(--signal)}
+  .hero__sub{margin-top:1.2rem;font-size:clamp(1rem,2vw,1.15rem);color:var(--muted);max-width:62ch}
+  .hero__stats{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.2rem}
+  .stat{border:1px solid var(--lineb);border-radius:12px;background:rgba(14,31,25,.7);padding:.7rem 1.1rem;display:flex;flex-direction:column;min-width:120px}
+  .stat b{font-family:var(--fd);font-weight:700;font-size:1.5rem;color:var(--volt);line-height:1.1}
+  .stat span{font-size:.8rem;color:var(--muted)}
+
+  .layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:2.4rem;padding:2.8rem 0 4rem}
+  .toc{position:sticky;top:92px;align-self:start;border:1px solid var(--line);border-radius:var(--radius);background:rgba(14,31,25,.55);padding:1rem 0;max-height:calc(100vh - 120px);overflow-y:auto}
+  .toc__title{font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--muted);padding:0 1.2rem .8rem;border-bottom:1px solid var(--line);margin-bottom:.6rem}
+  .toc a{display:flex;align-items:center;gap:.65rem;padding:.45rem 1.2rem;font-size:.9rem;font-weight:500;color:var(--muted);border-left:3px solid transparent;transition:color .18s,border-color .18s,background .18s}
+  .toc a .toc__n{font-family:var(--fm);font-size:.75rem;color:var(--lineb)}
+  .toc a:hover{color:var(--paper);background:rgba(108,140,255,.05)}
+  .toc a.active{color:var(--signal);border-left-color:var(--signal);background:rgba(108,140,255,.07)}
+  .toc a.active .toc__n{color:var(--signal)}
+  .content{min-width:0}
+  .content section{scroll-margin-top:96px}
+
+  .chapter{margin-bottom:3.6rem}
+  .chapter__head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.4rem}
+  .chapter__num{font-family:var(--fd);font-weight:700;font-size:1.05rem;color:var(--signal);border:1px solid rgba(108,140,255,.45);border-radius:8px;padding:.15rem .55rem;white-space:nowrap}
+  .chapter__title{font-family:var(--fd);font-weight:700;font-size:clamp(1.5rem,3.6vw,2.2rem);letter-spacing:-.01em}
+  .chapter__lede{color:var(--muted);font-size:.98rem;max-width:72ch;margin-bottom:1.6rem}
+  .chapter__rule{border:none;border-top:1px solid var(--line);margin:0 0 1.6rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem}
+  .card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:1.2rem 1.3rem;transition:border-color .2s,transform .18s,box-shadow .25s}
+  .card:hover{border-color:var(--lineb);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .card h4{font-family:var(--fd);font-weight:600;font-size:1.05rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+  .card h4::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--signal);flex-shrink:0}
+  .card--data h4::before{background:var(--data)}
+  .card--volt h4::before{background:var(--volt)}
+  .card p{font-size:.92rem;color:var(--muted)}
+  .card p strong{color:var(--paper);font-weight:500}
+  .card ul{margin-top:.6rem;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:.35rem}
+  .card li{font-size:.9rem;color:var(--muted);position:relative;padding-left:1.1rem}
+  .card li::before{content:"▹";position:absolute;left:0;color:var(--signal)}
+  .card--data li::before{color:var(--data)}
+
+  .term{font-family:var(--fm);font-size:.88em;color:var(--signal);background:rgba(108,140,255,.08);border:1px solid rgba(108,140,255,.25);border-radius:6px;padding:.02em .4em;white-space:nowrap}
+  .term--data{color:var(--data);background:rgba(90,209,224,.08);border-color:rgba(90,209,224,.28)}
+  .term--volt{color:var(--volt);background:rgba(255,200,87,.08);border-color:rgba(255,200,87,.28)}
+  .note{border:1px solid var(--lineb);border-left:4px solid var(--volt);border-radius:10px;background:rgba(255,200,87,.05);padding:.9rem 1.1rem;font-size:.92rem;color:var(--muted);margin:1.2rem 0}
+  .note strong{color:var(--volt);font-weight:600}
+
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);margin:1.2rem 0}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+  thead th{background:var(--panel2);font-family:var(--fd);font-weight:600;text-align:left;padding:.8rem 1rem;color:var(--paper);font-size:.88rem;border-bottom:1px solid var(--lineb);white-space:nowrap}
+  tbody td{padding:.7rem 1rem;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(108,140,255,.035)}
+  tbody td:first-child{color:var(--signal);font-family:var(--fm);font-size:.85rem;white-space:nowrap}
+  tbody td strong{color:var(--paper);font-weight:500}
+
+  .fact{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin:1.2rem 0}
+  .fact__item{border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;background:rgba(14,31,25,.45)}
+  .fact__item b{display:block;font-family:var(--fd);font-weight:700;font-size:1.35rem;color:var(--volt);line-height:1.2;margin-bottom:.3rem}
+  .fact__item span{font-size:.86rem;color:var(--muted)}
+
+  .exam{border:1px solid rgba(255,200,87,.32);border-left:4px solid var(--volt);border-radius:var(--radius);background:rgba(255,200,87,.05);padding:1.1rem 1.2rem;margin-top:1.7rem}
+  .exam__head{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+  .exam__tag{font-family:var(--fd);font-weight:700;font-size:.76rem;letter-spacing:.1em;color:var(--bg);background:var(--volt);border-radius:6px;padding:.14rem .55rem;white-space:nowrap}
+  .exam__title{font-family:var(--fd);font-weight:600;font-size:.92rem;color:var(--volt)}
+  .exam__item{border:1px solid var(--line);border-radius:10px;background:rgba(14,31,25,.6);padding:.85rem 1rem;margin-top:.65rem}
+  .exam__q{font-size:.9rem;color:var(--paper);margin-bottom:.35rem}
+  .exam__q b{color:var(--volt);font-weight:600}
+  .exam__a{font-size:.87rem;color:var(--muted)}
+  .exam__a strong{color:var(--signal);font-weight:600}
+
+  .footer{border-top:1px solid var(--line);background:var(--panel2)}
+  .footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.6rem 0 2rem;font-size:.85rem;color:var(--muted)}
+  .footer__brand{font-family:var(--fd);color:var(--signal);font-weight:600}
+
+  .totop{position:fixed;right:22px;bottom:22px;z-index:70;width:46px;height:46px;border-radius:12px;border:1px solid var(--lineb);background:var(--panel);color:var(--signal);font-size:1.2rem;cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s,background .2s,border-color .2s;box-shadow:var(--shadow)}
+  .totop.show{opacity:1;transform:none;pointer-events:auto}
+  .totop:hover{background:var(--signal);color:var(--bg);border-color:var(--signal)}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .mnav{display:none}
+  @media(max-width:920px){
+    .layout{grid-template-columns:1fr}
+    .toc{position:static;max-height:none;margin-bottom:1.4rem}
+    .toc__list{display:grid;grid-template-columns:1fr 1fr;gap:.1rem}
+    .topbar__links{display:none}
+    .mnav{display:inline-flex}
+    .hero__content{padding:3.6rem 0 3rem}
+  }
+  @media(max-width:560px){
+    .wrap{width:calc(100% - 28px)}
+    .toc__list{grid-template-columns:1fr}
+    .hero__stats{gap:.6rem}
+    .stat{min-width:104px;padding:.6rem .8rem}
+    .stat b{font-size:1.25rem}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .brand__dot,.hero__kick i{animation:none}
+    .reveal{opacity:1;transform:none;transition:none}
+    .card,.totop,.topbar__btn{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#top"><span class="brand__dot"></span> DS NOTES <em>数据结构知识全梳理</em></a>
+    <nav class="topbar__links" aria-label="快捷导航">
+      <a href="#ch1">绪论</a><a href="#ch3">栈队</a><a href="#ch5">树</a><a href="#ch6">图</a><a href="#ch7">查找</a><a href="#ch8">排序</a>
+    </nav>
+    <a class="topbar__btn mnav" href="#toc">目录</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <canvas class="hero__canvas" id="dsCanvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero__content">
+      <span class="hero__kick"><i></i> 单文件 · 零依赖 · 可离线阅读</span>
+      <h1 class="hero__title">数据结构<span>全量考点</span>：线性·树·图·查找·排序一张通</h1>
+      <p class="hero__sub">按 408 考纲主线整理八章全量知识点：逻辑结构、存储结构、算法复杂度，以及树、图、查找、排序核心算法。章末附考研真题。</p>
+      <div class="hero__stats">
+        <div class="stat"><b>8</b><span>知识章节</span></div>
+        <div class="stat"><b>9</b><span>常用排序</span></div>
+        <div class="stat"><b>45</b><span>考纲分值</span></div>
+        <div class="stat"><b>O(1)</b><span>最优查找</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="layout">
+
+    <aside class="toc" id="toc">
+      <p class="toc__title">章节目录</p>
+      <div class="toc__list">
+        <a href="#ch1"><span class="toc__n">01</span> 绪论与算法分析</a>
+        <a href="#ch2"><span class="toc__n">02</span> 线性表</a>
+        <a href="#ch3"><span class="toc__n">03</span> 栈、队列与数组</a>
+        <a href="#ch4"><span class="toc__n">04</span> 串与模式匹配</a>
+        <a href="#ch5"><span class="toc__n">05</span> 树与二叉树</a>
+        <a href="#ch6"><span class="toc__n">06</span> 图</a>
+        <a href="#ch7"><span class="toc__n">07</span> 查找</a>
+        <a href="#ch8"><span class="toc__n">08</span> 排序</a>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- 01 -->
+      <section class="chapter reveal" id="ch1">
+        <div class="chapter__head"><span class="chapter__num">01</span><h2 class="chapter__title">绪论与算法分析</h2></div>
+        <p class="chapter__lede">数据结构 = 逻辑结构 + 存储结构 + 运算；算法分析衡量时间与空间代价。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>基本概念</h4>
+            <ul>
+              <li>数据元素、数据项、数据对象</li>
+              <li>逻辑结构：集合、线性、树形、图状</li>
+              <li>存储结构：顺序存储、链式存储、索引存储、散列存储</li>
+              <li>运算：插入、删除、修改、查找、排序、遍历</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>算法与复杂度</h4>
+            <ul>
+              <li>算法特性：有穷性、确定性、可行性、输入、输出</li>
+              <li><span class="term">时间复杂度</span>：基本语句执行次数的数量级</li>
+              <li><span class="term">空间复杂度</span>：除输入外的辅助空间</li>
+              <li>常见阶：O(1) &lt; O(logn) &lt; O(n) &lt; O(nlogn) &lt; O(n²) &lt; O(2ⁿ)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>分析嵌套循环看执行次数最大的内层；递归算法空间复杂度等于递归深度。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>下列时间复杂度数量级最高的是？A. O(nlogn) B. O(n²) C. O(2ⁿ) D. O(logn)</p><p class="exam__a"><strong>答案：C。</strong>指数阶增长最快：O(1)&lt;O(logn)&lt;O(n)&lt;O(nlogn)&lt;O(n²)&lt;O(2ⁿ)。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>算法的时间复杂度与什么因素直接相关？</p><p class="exam__a"><strong>答案：问题的规模 n。</strong>时间复杂度是输入规模 n 的函数，衡量基本操作执行次数随 n 的增长阶。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>简述数据的逻辑结构与存储结构的关系。</p><p class="exam__a"><strong>答案：</strong>逻辑结构是数据元素间的抽象关系（独立于计算机）；存储结构是逻辑结构在计算机中的表示（物理实现），同一逻辑结构可有多种存储结构。</p></div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="chapter reveal" id="ch2">
+        <div class="chapter__head"><span class="chapter__num">02</span><h2 class="chapter__title">线性表</h2></div>
+        <p class="chapter__lede">顺序表随机访问、链表灵活插入删除；两者是后续结构的基础。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>顺序表</h4>
+            <ul>
+              <li>用一组地址连续的存储单元存储，随机存取 O(1)</li>
+              <li>插入/删除平均移动 n/2 个元素，时间 O(n)</li>
+              <li>容量固定，可动态扩容（倍增分配）</li>
+              <li>适用：频繁查找、元素个数稳定</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>单链表</h4>
+            <ul>
+              <li>每个结点含数据域 + 指针域，头指针/头结点</li>
+              <li>查找需从头遍历 O(n)；已知前驱时插入/删除 O(1)</li>
+              <li>头插法/尾插法建立链表</li>
+              <li>适用：频繁插入删除、长度动态变化</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>双链表与循环链表</h4>
+            <ul>
+              <li>双链表：前驱指针 + 后继指针，双向遍历</li>
+              <li>循环链表：尾结点指向头结点，可从任一结点遍历全表</li>
+              <li>静态链表：数组模拟指针（游标），适用于无指针语言</li>
+              <li>循环双链表判空：head-&gt;next == head</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>顺序表「存快改慢」，链表「改快存慢」；链表题先画图再写指针操作，防止断链。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>在长度为 n 的顺序表中删除第 i 个元素，平均移动元素个数为？</p><p class="exam__a"><strong>答案：(n−1)/2（约 n/2）。</strong>删除需将后续元素前移，各位置等概率时平均移动 (n−1)/2 个。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>顺序表与单链表相比，最大的优势是？</p><p class="exam__a"><strong>答案：随机存取。</strong>顺序表按下标 O(1) 访问任意元素；链表必须从头遍历。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>单链表带头结点有什么好处？</p><p class="exam__a"><strong>答案：</strong>头结点使空表和非空表的处理统一，插入/删除首结点时无需单独修改头指针。</p></div>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="chapter reveal" id="ch3">
+        <div class="chapter__head"><span class="chapter__num">03</span><h2 class="chapter__title">栈、队列与数组</h2></div>
+        <p class="chapter__lede">栈后进先出、队列先进先出；数组是线性表的多维推广。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>栈 Stack</h4>
+            <ul>
+              <li>LIFO：只允许在栈顶插入/删除</li>
+              <li>顺序栈与链栈；栈空/栈满判定</li>
+              <li>应用：函数调用、括号匹配、表达式求值、递归</li>
+              <li>入栈序列 abc 的出栈序列数：卡特兰数</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>队列 Queue</h4>
+            <ul>
+              <li>FIFO：队尾入队、队头出队</li>
+              <li><span class="term">循环队列</span>：front 指向队头、rear 指向队尾下一个位置</li>
+              <li>判满：(rear+1)%MaxSize == front；判空：front == rear</li>
+              <li>应用：层次遍历、广度优先搜索、缓冲</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>数组与矩阵压缩</h4>
+            <ul>
+              <li>一维/多维数组按行优先或列优先存储</li>
+              <li>地址计算：Loc(a[i][j]) 由基地址 + 偏移</li>
+              <li><span class="term">对称矩阵</span>压缩存储下三角约 n(n+1)/2 个元素</li>
+              <li><span class="term">稀疏矩阵</span>：三元组表、十字链表存储</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>循环队列牺牲一个存储单元区分空满；「栈-递归-DFS」「队列-层次-BFS」成对记忆。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>循环队列中 front=3、rear=5、MaxSize=6，则队列中元素个数为？</p><p class="exam__a"><strong>答案：2。</strong>元素个数 = (rear − front + MaxSize) % MaxSize = (5−3+6)%6 = 2。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>栈和队列的共同点是？</p><p class="exam__a"><strong>答案：都只允许在端点处插入和删除元素。</strong>栈限制栈顶、队列限制队尾入队头出，是操作受限的线性表。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>递归函数执行时依靠什么数据结构保存现场？</p><p class="exam__a"><strong>答案：栈。</strong>系统调用栈保存每层递归的参数、局部变量与返回地址，先进后出。</p></div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="chapter reveal" id="ch4">
+        <div class="chapter__head"><span class="chapter__num">04</span><h2 class="chapter__title">串与模式匹配</h2></div>
+        <p class="chapter__lede">串是字符组成的线性表；模式匹配是串的核心算法。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>串的基本概念</h4>
+            <ul>
+              <li>子串、主串、前缀、后缀；串长</li>
+              <li>存储：定长顺序存储、堆分配存储、块链存储</li>
+              <li>串的模式匹配：在主串中找子串（模式串）首次出现位置</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>朴素匹配 vs KMP</h4>
+            <ul>
+              <li>朴素匹配：逐个字符比较，失败回溯主串 i，最坏 O(n×m)</li>
+              <li><span class="term">KMP 算法</span>：利用 next 数组避免主串指针回溯</li>
+              <li>next[j]：模式串前 j−1 个字符的最长相等前后缀长度 + 1（约定 next[1]=0）</li>
+              <li>KMP 时间复杂度 O(n+m)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>next 数组只与模式串有关；失配时主串指针不回退，仅移动模式串。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>KMP 算法相比朴素匹配算法的核心改进是什么？</p><p class="exam__a"><strong>答案：主串指针不回溯。</strong>利用 next 数组让模式串跳跃式移动，避免重复比较，平均/最坏时间 O(n+m)。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>串 'abab' 的长度为？</p><p class="exam__a"><strong>答案：4。</strong>串长即字符个数。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>next[1] 的约定值是多少？</p><p class="exam__a"><strong>答案：0（按 1 起始编号约定）。</strong>第一个字符失配时模式串整体后移一位。</p></div>
+        </div>
+      </section>
+
+      <!-- 05 -->
+      <section class="chapter reveal" id="ch5">
+        <div class="chapter__head"><span class="chapter__num">05</span><h2 class="chapter__title">树与二叉树</h2></div>
+        <p class="chapter__lede">二叉树遍历、线索化、哈夫曼树、BST 与 AVL——树是 408 的大户。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>二叉树基础</h4>
+            <ul>
+              <li>性质：n₀ = n₂ + 1（叶子 = 度为 2 结点 + 1）</li>
+              <li>第 k 层最多 2^(k−1) 个结点；深度 h 最多 2^h − 1</li>
+              <li>完全二叉树：叶子只出现在最后两层，最底层靠左</li>
+              <li>顺序存储（数组下标关系）与链式存储</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>遍历与线索化</h4>
+            <ul>
+              <li>先序：根左右；中序：左根右；后序：左右根；层次</li>
+              <li>已知先序+中序 或 后序+中序可唯一确定二叉树</li>
+              <li><span class="term">线索二叉树</span>：利用空指针指向前驱/后继，lTag/rTag 标记</li>
+              <li>遍历序列的栈实现与递归对应</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>哈夫曼树与编码</h4>
+            <ul>
+              <li><span class="term">哈夫曼树</span>：带权路径长度 WPL 最小的二叉树</li>
+              <li>构造：每次取两个最小权值结点合并</li>
+              <li>哈夫曼编码：前缀编码，压缩数据</li>
+              <li>n 个叶子结点的哈夫曼树共有 2n−1 个结点</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>BST 与 AVL</h4>
+            <ul>
+              <li><span class="term">二叉排序树 BST</span>：左小右大，中序遍历有序</li>
+              <li>BST 查找：平均 O(logn)，最坏（单支树）O(n)</li>
+              <li><span class="term">平衡二叉树 AVL</span>：左右子树高度差 ≤ 1</li>
+              <li>AVL 插入需 LL/RR/LR/RL 四种旋转调整</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>给定中序可判左右子树规模；求二叉树唯一性：必须有中序。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>对任意二叉树，若叶子结点数为 n₀，度为 2 的结点数为 n₂，则成立的关系是？</p><p class="exam__a"><strong>答案：n₀ = n₂ + 1。</strong>由分支计数：结点总数 = 边数 + 1 = n₁ + 2n₂ + 1，联立消去 n₁ 即得。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>一棵完全二叉树有 100 个结点，其叶子结点数为？</p><p class="exam__a"><strong>答案：50。</strong>完全二叉树度为 1 的结点最多 1 个；n=n₀+n₁+n₂ 且 n₀=n₂+1 → 100=2n₀−1+n₁，n₁=1（100 为偶数）→ n₀=50。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>n 个叶子结点的哈夫曼树共有多少个结点？</p><p class="exam__a"><strong>答案：2n−1。</strong>哈夫曼树只有度为 0 和 2 的结点，n₀+n₂ = n+(n−1) = 2n−1。</p></div>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section class="chapter reveal" id="ch6">
+        <div class="chapter__head"><span class="chapter__num">06</span><h2 class="chapter__title">图</h2></div>
+        <p class="chapter__lede">存储、遍历、最小生成树、最短路径、拓扑排序与关键路径。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>存储与遍历</h4>
+            <ul>
+              <li><span class="term">邻接矩阵</span>：n×n，O(n²) 空间，稠密图适用</li>
+              <li><span class="term">邻接表</span>：顶点表 + 边表，O(n+e)，稀疏图适用</li>
+              <li>DFS（深度优先，栈/递归）、BFS（广度优先，队列）</li>
+              <li>遍历可判断连通性；生成树/生成森林</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>最小生成树 MST</h4>
+            <ul>
+              <li><span class="term">Prim 算法</span>：从顶点出发扩展，O(n²)，适合稠密图</li>
+              <li><span class="term">Kruskal 算法</span>：按边权从小到大并入，O(eloge)，适合稀疏图</li>
+              <li>MST 不唯一，但权值和唯一（边权互异时唯一）</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>最短路径</h4>
+            <ul>
+              <li><span class="term">Dijkstra</span>：单源，非负权，O(n²)</li>
+              <li><span class="term">Floyd</span>：所有顶点对，动态规划，O(n³)</li>
+              <li>BFS 可求无权图最短路径</li>
+              <li>负权边：Dijkstra 失效，用 Bellman-Ford</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>拓扑排序与关键路径</h4>
+            <ul>
+              <li><span class="term">拓扑排序</span>：DAG 才有；每次删入度为 0 的顶点</li>
+              <li>拓扑序列不唯一；有环则无拓扑序列</li>
+              <li><span class="term">关键路径</span>：AOE 网中从源点到汇点的最长路径</li>
+              <li>关键活动：最早开始 = 最迟开始；缩短关键活动可缩短工期</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>「Prim 点、Kruskal 边」「Dijkstra 单源、Floyd 全源」；有向无环图才能拓扑排序。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>Prim 算法适合求解什么类型图的最小生成树？</p><p class="exam__a"><strong>答案：稠密图。</strong>Prim 时间复杂度 O(n²) 与边数无关，稠密图（边多）优势明显；Kruskal O(eloge) 适合稀疏图。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>一个有向图存在拓扑序列的充要条件是什么？</p><p class="exam__a"><strong>答案：该图为有向无环图（DAG）。</strong>存在环则环上顶点永远有入度，无法全部删除。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>Dijkstra 算法不能用于带什么边的图？</p><p class="exam__a"><strong>答案：负权边。</strong>负权会破坏「已确定最短路径」的贪心前提，需用 Bellman-Ford 等算法。</p></div>
+        </div>
+      </section>
+
+      <!-- 07 -->
+      <section class="chapter reveal" id="ch7">
+        <div class="chapter__head"><span class="chapter__num">07</span><h2 class="chapter__title">查找</h2></div>
+        <p class="chapter__lede">从顺序查找到哈希表，核心指标是平均查找长度 ASL。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>线性查找与二分</h4>
+            <ul>
+              <li>顺序查找：ASL = (n+1)/2，O(n)</li>
+              <li><span class="term">折半查找</span>：有序表，ASL = log₂(n+1) − 1，O(logn)</li>
+              <li>折半查找判定树：平衡二叉排序树，比较次数 = 结点深度</li>
+              <li>分块查找：索引顺序表，ASL = 索引查找 + 块内顺序查找</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>树形查找</h4>
+            <ul>
+              <li><span class="term">B 树</span>：多路平衡查找树，m 阶；根至少 2 个孩子、非叶至少 ⌈m/2⌉ 个孩子</li>
+              <li><span class="term">B+ 树</span>：叶子结点链成链表，适合数据库索引/文件系统</li>
+              <li>红黑树：自平衡 BST，插入删除 O(logn)（408 了解层次）</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>散列表 Hash</h4>
+            <ul>
+              <li>散列函数：除留余数法 H(key)=key%p（p 取不大于表长 m 的最大素数）</li>
+              <li>冲突解决：<span class="term">开放定址法</span>（线性探测、平方探测、再散列）</li>
+              <li>冲突解决：<span class="term">链地址法</span>（拉链法）</li>
+              <li>装填因子 α = 表中记录数/表长；ASL 与 α 有关</li>
+              <li>查找成功/失败 ASL 计算是常考点</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>线性探测易造成「堆积」；链地址法最坏仍 O(n)；散列查找平均接近 O(1)。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>长度为 n 的有序表采用折半查找，其时间复杂度为？</p><p class="exam__a"><strong>答案：O(log₂n)。</strong>每趟比较将区间减半，最多比较 ⌈log₂(n+1)⌉ 次。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>除留余数法选 p 的常用原则是？</p><p class="exam__a"><strong>答案：p 取不大于散列表表长的最大素数。</strong>减少地址聚集，分布更均匀。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>链地址法解决冲突的基本思想是什么？</p><p class="exam__a"><strong>答案：</strong>把所有散列地址相同的记录链在同一个单链表中，表头存于散列表对应单元。</p></div>
+        </div>
+      </section>
+
+      <!-- 08 -->
+      <section class="chapter reveal" id="ch8">
+        <div class="chapter__head"><span class="chapter__num">08</span><h2 class="chapter__title">排序</h2></div>
+        <p class="chapter__lede">九大排序的时间、空间、稳定性——综合大题的弹药库。</p>
+        <hr class="chapter__rule">
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>算法</th><th>平均时间</th><th>最坏时间</th><th>空间</th><th>稳定性</th><th>特点</th></tr></thead>
+            <tbody>
+              <tr><td>直接插入</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>稳定</td><td>基本有序时快</td></tr>
+              <tr><td>希尔排序</td><td>O(n^1.3)</td><td>O(n²)</td><td>O(1)</td><td>不稳定</td><td>增量递减分组插入</td></tr>
+              <tr><td>冒泡排序</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>稳定</td><td>相邻交换</td></tr>
+              <tr><td>快速排序</td><td>O(nlogn)</td><td>O(n²)</td><td>O(logn)</td><td>不稳定</td><td>基准划分，最坏基本有序</td></tr>
+              <tr><td>简单选择</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>不稳定</td><td>每趟选最小</td></tr>
+              <tr><td>堆排序</td><td>O(nlogn)</td><td>O(nlogn)</td><td>O(1)</td><td>不稳定</td><td>建堆+调整</td></tr>
+              <tr><td>归并排序</td><td>O(nlogn)</td><td>O(nlogn)</td><td>O(n)</td><td>稳定</td><td>二路归并</td></tr>
+              <tr><td>基数排序</td><td>O(d(n+r))</td><td>O(d(n+r))</td><td>O(r)</td><td>稳定</td><td>按位分配收集</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note"><strong>记忆点：</strong>稳定的只有：插入、冒泡、归并、基数；快速排序最坏情形是序列基本有序时 O(n²)。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>下列排序算法中，平均时间复杂度为 O(nlogn) 的是？A. 冒泡 B. 直接插入 C. 快速排序 D. 简单选择</p><p class="exam__a"><strong>答案：C。</strong>快速排序平均 O(nlogn)；冒泡、插入、选择平均均为 O(n²)。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>下列排序算法中，属于稳定排序的是？</p><p class="exam__a"><strong>答案：直接插入、冒泡、归并、基数。</strong>希尔、快排、简单选择、堆排序不稳定。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>快速排序在什么情况下最坏时间复杂度为 O(n²)？</p><p class="exam__a"><strong>答案：序列基本有序或每次划分极不平衡时。</strong>此时每次只减少一个元素，递归深度 n，比较 O(n²)。</p></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span class="footer__brand">DS NOTES</span>
+    <span>数据结构知识点全梳理 </span>
+    <span>结构决定性能，算法决定效率</span>
+  </div>
+</footer>
+
+<button class="totop" id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('dsCanvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, nodes = [], edges = [], packets = [];
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function seed(){
+    var count = Math.round(W / 130);
+    nodes = [];
+    for(var i=0;i<count;i++){ nodes.push({x:Math.random()*W, y:Math.random()*H, r:3+Math.random()*4}); }
+    edges = [];
+    for(var i=0;i<count;i++){
+      for(var j=i+1;j<count;j++){
+        if(Math.random()<.22) edges.push({a:nodes[i], b:nodes[j]});
+      }
+    }
+    packets = [];
+    for(var i=0;i<Math.min(edges.length, 12);i++){ spawnPacket(true); }
+  }
+  function spawnPacket(immediate){
+    var e = edges[Math.floor(Math.random()*edges.length)];
+    if(!e) return;
+    packets.push({a:e.a, b:e.b, t:immediate?Math.random():0, speed:.002+Math.random()*.004, hue:Math.random()<.5?0:1});
+  }
+  function resize(){
+    var rect = canvas.parentElement.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var i;
+    for(i=0;i<edges.length;i++){ var e=edges[i]; ctx.beginPath(); ctx.moveTo(e.a.x,e.a.y); ctx.lineTo(e.b.x,e.b.y); ctx.strokeStyle='rgba(90,209,224,.14)'; ctx.lineWidth=1; ctx.stroke(); }
+    for(i=0;i<nodes.length;i++){ var n=nodes[i]; ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='rgba(108,140,255,.30)'; ctx.fill(); }
+    for(i=0;i<packets.length;i++){
+      var p=packets[i]; p.t+=p.speed;
+      if(p.t>=1){ packets.splice(i,1); i--; spawnPacket(false); continue; }
+      var x=p.a.x+(p.b.x-p.a.x)*p.t, y=p.a.y+(p.b.y-p.a.y)*p.t;
+      var c=p.hue===0?'108,140,255':'90,209,224';
+      ctx.beginPath(); ctx.arc(x,y,2.5,0,Math.PI*2); ctx.fillStyle='rgba('+c+',.9)'; ctx.fill();
+      ctx.shadowBlur=8; ctx.shadowColor='rgba('+c+',.7)';
+    }
+    ctx.shadowBlur=0;
+    requestAnimationFrame(draw);
+  }
+  if(!reduce){ resize(); window.addEventListener('resize', resize); requestAnimationFrame(draw); }
+  else {
+    var rect=canvas.parentElement.getBoundingClientRect();
+    W=rect.width; H=rect.height;
+    canvas.width=W*DPR; canvas.height=H*DPR;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+    for(var i=0;i<edges.length;i++){ var e=edges[i]; ctx.beginPath(); ctx.moveTo(e.a.x,e.a.y); ctx.lineTo(e.b.x,e.b.y); ctx.strokeStyle='rgba(90,209,224,.12)'; ctx.stroke(); }
+    for(var j=0;j<nodes.length;j++){ var n=nodes[j]; ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='rgba(108,140,255,.28)'; ctx.fill(); }
+  }
+
+  var tocLinks = document.querySelectorAll('.toc a');
+  var sections = [];
+  tocLinks.forEach(function(a){ sections.push(document.querySelector(a.getAttribute('href'))); });
+  var toTop = document.getElementById('toTop');
+  var ticking = false;
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(function(){
+        ticking = false;
+        var pos = window.scrollY + 120;
+        var current = sections[0];
+        sections.forEach(function(s){ if(s.offsetTop <= pos) current = s; });
+        tocLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current.id); });
+        toTop.classList.toggle('show', window.scrollY > 600);
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: reduce?'auto':'smooth'}); });
+  onScroll();
+
+  var reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.08});
+    reveals.forEach(function(el){ io.observe(el); });
+  } else { reveals.forEach(function(el){ el.classList.add('in'); }); }
+})();
+</script>
+</body>
+</html>

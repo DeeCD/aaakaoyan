@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考研英语知识点全梳理 · ENG NOTES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A1424; --panel:#12233C; --panel2:#0D1B30;
+    --signal:#FF7EB6; --data:#5EC8FF; --volt:#FF8A5C;
+    --paper:#EDF3FA; --muted:#93A9C6; --line:#233A58; --lineb:#35547A;
+    --radius:14px; --shadow:0 18px 40px rgba(3,8,18,.5);
+    --fd:"Space Grotesk","Noto Sans SC",sans-serif;
+    --fb:"Noto Sans SC",system-ui,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{background:var(--bg);color:var(--paper);font-family:var(--fb);font-size:16px;line-height:1.75;overflow-x:hidden}
+  ::selection{background:var(--signal);color:var(--bg)}
+  :focus-visible{outline:3px solid var(--signal);outline-offset:2px;border-radius:4px}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+
+  .topbar{position:sticky;top:0;z-index:60;background:rgba(10,20,36,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .topbar__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 0}
+  .brand{display:flex;align-items:center;gap:.7rem;font-family:var(--fd);font-weight:700;font-size:1.05rem}
+  .brand__dot{width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(255,126,182,.18),0 0 18px rgba(255,126,182,.8);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.82)}}
+  .brand em{font-style:normal;color:var(--muted);font-weight:400;font-size:.85rem}
+  .topbar__links{display:flex;gap:1.2rem;font-size:.9rem;font-weight:500}
+  .topbar__links a{color:var(--muted);transition:color .2s}
+  .topbar__links a:hover{color:var(--signal)}
+  .topbar__btn{font-family:var(--fd);font-weight:600;font-size:.9rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--lineb);color:var(--signal);transition:background .2s,border-color .2s,transform .15s}
+  .topbar__btn:hover{background:rgba(255,126,182,.08);border-color:var(--signal);transform:translateY(-1px)}
+
+  .hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+  .hero__content{position:relative;z-index:1;padding:5.5rem 0 4.5rem;max-width:800px}
+  .hero__kick{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.82rem;letter-spacing:.08em;color:var(--signal);border:1px solid rgba(255,126,182,.4);border-radius:999px;padding:.3rem .8rem;background:rgba(255,126,182,.06);margin-bottom:1.4rem}
+  .hero__kick i{width:7px;height:7px;border-radius:50%;background:var(--signal);display:inline-block;animation:pulse 2s infinite}
+  .hero__title{font-family:var(--fd);font-size:clamp(2.3rem,6.4vw,4.6rem);line-height:1.08;letter-spacing:-.02em;font-weight:700}
+  .hero__title span{color:var(--signal)}
+  .hero__sub{margin-top:1.2rem;font-size:clamp(1rem,2vw,1.15rem);color:var(--muted);max-width:62ch}
+  .hero__stats{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.2rem}
+  .stat{border:1px solid var(--lineb);border-radius:12px;background:rgba(18,35,60,.7);padding:.7rem 1.1rem;display:flex;flex-direction:column;min-width:120px}
+  .stat b{font-family:var(--fd);font-weight:700;font-size:1.5rem;color:var(--signal);line-height:1.1}
+  .stat span{font-size:.8rem;color:var(--muted)}
+
+  .layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:2.4rem;padding:2.8rem 0 4rem}
+  .toc{position:sticky;top:92px;align-self:start;border:1px solid var(--line);border-radius:var(--radius);background:rgba(18,35,60,.55);padding:1rem 0;max-height:calc(100vh - 120px);overflow-y:auto}
+  .toc__title{font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--muted);padding:0 1.2rem .8rem;border-bottom:1px solid var(--line);margin-bottom:.6rem}
+  .toc a{display:flex;align-items:center;gap:.65rem;padding:.45rem 1.2rem;font-size:.9rem;font-weight:500;color:var(--muted);border-left:3px solid transparent;transition:color .18s,border-color .18s,background .18s}
+  .toc a .toc__n{font-family:var(--fm);font-size:.75rem;color:var(--lineb)}
+  .toc a:hover{color:var(--paper);background:rgba(255,126,182,.05)}
+  .toc a.active{color:var(--signal);border-left-color:var(--signal);background:rgba(255,126,182,.07)}
+  .toc a.active .toc__n{color:var(--signal)}
+  .content{min-width:0}
+  .content section{scroll-margin-top:96px}
+
+  .chapter{margin-bottom:3.6rem}
+  .chapter__head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.4rem}
+  .chapter__num{font-family:var(--fd);font-weight:700;font-size:1.05rem;color:var(--signal);border:1px solid rgba(255,126,182,.45);border-radius:8px;padding:.15rem .55rem;white-space:nowrap}
+  .chapter__title{font-family:var(--fd);font-weight:700;font-size:clamp(1.5rem,3.6vw,2.2rem);letter-spacing:-.01em}
+  .chapter__lede{color:var(--muted);font-size:.98rem;max-width:72ch;margin-bottom:1.6rem}
+  .chapter__rule{border:none;border-top:1px solid var(--line);margin:0 0 1.6rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem}
+  .card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:1.2rem 1.3rem;transition:border-color .2s,transform .18s,box-shadow .25s}
+  .card:hover{border-color:var(--lineb);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .card h4{font-family:var(--fd);font-weight:600;font-size:1.05rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+  .card h4::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--signal);flex-shrink:0}
+  .card--data h4::before{background:var(--data)}
+  .card--volt h4::before{background:var(--volt)}
+  .card p{font-size:.92rem;color:var(--muted)}
+  .card p strong{color:var(--paper);font-weight:500}
+  .card ul{margin-top:.6rem;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:.35rem}
+  .card li{font-size:.9rem;color:var(--muted);position:relative;padding-left:1.1rem}
+  .card li::before{content:"▹";position:absolute;left:0;color:var(--signal)}
+  .card--data li::before{color:var(--data)}
+
+  .term{font-family:var(--fm);font-size:.88em;color:var(--signal);background:rgba(255,126,182,.08);border:1px solid rgba(255,126,182,.25);border-radius:6px;padding:.02em .4em;white-space:nowrap}
+  .term--data{color:var(--data);background:rgba(94,200,255,.08);border-color:rgba(94,200,255,.28)}
+  .term--volt{color:var(--volt);background:rgba(255,138,92,.08);border-color:rgba(255,138,92,.28)}
+  .note{border:1px solid var(--lineb);border-left:4px solid var(--volt);border-radius:10px;background:rgba(255,138,92,.05);padding:.9rem 1.1rem;font-size:.92rem;color:var(--muted);margin:1.2rem 0}
+  .note strong{color:var(--volt);font-weight:600}
+
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);margin:1.2rem 0}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+  thead th{background:var(--panel2);font-family:var(--fd);font-weight:600;text-align:left;padding:.8rem 1rem;color:var(--paper);font-size:.88rem;border-bottom:1px solid var(--lineb);white-space:nowrap}
+  tbody td{padding:.7rem 1rem;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(255,126,182,.035)}
+  tbody td:first-child{color:var(--signal);font-family:var(--fm);font-size:.85rem;white-space:nowrap}
+  tbody td strong{color:var(--paper);font-weight:500}
+
+  .fact{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin:1.2rem 0}
+  .fact__item{border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;background:rgba(18,35,60,.45)}
+  .fact__item b{display:block;font-family:var(--fd);font-weight:700;font-size:1.35rem;color:var(--signal);line-height:1.2;margin-bottom:.3rem}
+  .fact__item span{font-size:.86rem;color:var(--muted)}
+
+  .exam{border:1px solid rgba(255,138,92,.32);border-left:4px solid var(--volt);border-radius:var(--radius);background:rgba(255,138,92,.05);padding:1.1rem 1.2rem;margin-top:1.7rem}
+  .exam__head{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+  .exam__tag{font-family:var(--fd);font-weight:700;font-size:.76rem;letter-spacing:.1em;color:var(--bg);background:var(--volt);border-radius:6px;padding:.14rem .55rem;white-space:nowrap}
+  .exam__title{font-family:var(--fd);font-weight:600;font-size:.92rem;color:var(--volt)}
+  .exam__item{border:1px solid var(--line);border-radius:10px;background:rgba(18,35,60,.6);padding:.85rem 1rem;margin-top:.65rem}
+  .exam__q{font-size:.9rem;color:var(--paper);margin-bottom:.35rem}
+  .exam__q b{color:var(--volt);font-weight:600}
+  .exam__a{font-size:.87rem;color:var(--muted)}
+  .exam__a strong{color:var(--signal);font-weight:600}
+
+  .footer{border-top:1px solid var(--line);background:var(--panel2)}
+  .footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.6rem 0 2rem;font-size:.85rem;color:var(--muted)}
+  .footer__brand{font-family:var(--fd);color:var(--signal);font-weight:600}
+
+  .totop{position:fixed;right:22px;bottom:22px;z-index:70;width:46px;height:46px;border-radius:12px;border:1px solid var(--lineb);background:var(--panel);color:var(--signal);font-size:1.2rem;cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s,background .2s,border-color .2s;box-shadow:var(--shadow)}
+  .totop.show{opacity:1;transform:none;pointer-events:auto}
+  .totop:hover{background:var(--signal);color:var(--bg);border-color:var(--signal)}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .mnav{display:none}
+  @media(max-width:920px){
+    .layout{grid-template-columns:1fr}
+    .toc{position:static;max-height:none;margin-bottom:1.4rem}
+    .toc__list{display:grid;grid-template-columns:1fr 1fr;gap:.1rem}
+    .topbar__links{display:none}
+    .mnav{display:inline-flex}
+    .hero__content{padding:3.6rem 0 3rem}
+  }
+  @media(max-width:560px){
+    .wrap{width:calc(100% - 28px)}
+    .toc__list{grid-template-columns:1fr}
+    .hero__stats{gap:.6rem}
+    .stat{min-width:104px;padding:.6rem .8rem}
+    .stat b{font-size:1.25rem}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .brand__dot,.hero__kick i{animation:none}
+    .reveal{opacity:1;transform:none;transition:none}
+    .card,.totop,.topbar__btn{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#top"><span class="brand__dot"></span> ENG NOTES <em>考研英语知识全梳理</em></a>
+    <nav class="topbar__links" aria-label="快捷导航">
+      <a href="#ch1">基础</a><a href="#ch2">完形</a><a href="#ch3">阅读</a><a href="#ch4">新题型</a><a href="#ch5">翻译</a><a href="#ch6">写作</a>
+    </nav>
+    <a class="topbar__btn mnav" href="#toc">目录</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <canvas class="hero__canvas" id="engCanvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero__content">
+      <span class="hero__kick"><i></i> 单文件 · 零依赖 · 可离线阅读</span>
+      <h1 class="hero__title">考研英语<span>全量考点</span>：词汇·阅读·翻译·写作一张通</h1>
+      <p class="hero__sub">按英语（一）题型主线整理六章全量知识：词汇语法、完形、阅读、新题型、翻译、写作，附各题型的解题策略与真题示例。章末附考研真题。</p>
+      <div class="hero__stats">
+        <div class="stat"><b>6</b><span>知识章节</span></div>
+        <div class="stat"><b>100</b><span>试卷总分</span></div>
+        <div class="stat"><b>5500</b><span>考纲词汇</span></div>
+        <div class="stat"><b>4</b><span>阅读篇章</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="layout">
+
+    <aside class="toc" id="toc">
+      <p class="toc__title">章节目录</p>
+      <div class="toc__list">
+        <a href="#ch1"><span class="toc__n">01</span> 词汇与语法基础</a>
+        <a href="#ch2"><span class="toc__n">02</span> 完形填空</a>
+        <a href="#ch3"><span class="toc__n">03</span> 阅读理解</a>
+        <a href="#ch4"><span class="toc__n">04</span> 新题型</a>
+        <a href="#ch5"><span class="toc__n">05</span> 翻译</a>
+        <a href="#ch6"><span class="toc__n">06</span> 写作</a>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- 01 -->
+      <section class="chapter reveal" id="ch1">
+        <div class="chapter__head"><span class="chapter__num">01</span><h2 class="chapter__title">词汇与语法基础</h2></div>
+        <p class="chapter__lede">5500 词 + 长难句语法是所有题型的底座。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>词汇策略</h4>
+            <ul>
+              <li>高频词优先：真题中反复出现的核心动词、抽象名词</li>
+              <li>词根词缀法：un-/in-/dis- 否定；-tion/-ment 名词后缀</li>
+              <li>熟词僻义：如 address（解决）、issue（问题/发行）</li>
+              <li>词义猜测：利用上下文定义、对比、因果线索</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>核心语法</h4>
+            <ul>
+              <li><span class="term">定语从句</span>：which/that/who，先行词判断</li>
+              <li><span class="term">状语从句</span>：时间、原因、条件、让步连接词</li>
+              <li>非谓语动词：不定式、动名词、分词作状语/定语</li>
+              <li>虚拟语气、倒装、强调句型</li>
+              <li>并列结构：not only...but also、rather than</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>长难句拆分</h4>
+            <ul>
+              <li>先找谓语动词，确定主句与从句边界</li>
+              <li>剥离插入语、介词短语、非谓语修饰成分</li>
+              <li>识别连词：and/or 并列、which/that 定语</li>
+              <li>主干先行：主-谓-宾核心意思先把握</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>长难句 = 主干 + 修饰；先抓主谓宾，再逐层挂修饰成分。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【语法题】</b>The book <u>____</u> I borrowed from the library is very useful. 空格应填？</p><p class="exam__a"><strong>答案：which/that。</strong>先行词 the book 在从句中作 borrow 的宾语，用关系代词 which/that 引导定语从句。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【词汇题】</b>单词 address 在句子 "The government must address the problem" 中的含义是？</p><p class="exam__a"><strong>答案：解决、处理。</strong>address 除「地址」外，作动词常表「解决、处理」，是高频熟词僻义。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【长难句】</b>拆分 "Students who study hard tend to perform better in exams."</p><p class="exam__a"><strong>答案：主干 = Students tend to perform better in exams；</strong>who study hard 为定语从句修饰 Students。</p></div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="chapter reveal" id="ch2">
+        <div class="chapter__head"><span class="chapter__num">02</span><h2 class="chapter__title">完形填空</h2></div>
+        <p class="chapter__lede">10 分、20 空；重语法搭配与逻辑衔接，轻纯单词辨析。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>题型特点</h4>
+            <ul>
+              <li>首句通常不设空，给出全文主题</li>
+              <li>考点分布：逻辑关系词、固定搭配、词义辨析、语法结构</li>
+              <li>上下文线索优于单词本义：注意指代、转折、因果</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>解题策略</h4>
+            <ul>
+              <li>通读全文把握主线 → 逐空代入 → 回读验证</li>
+              <li>逻辑词高频：however/but 转折、therefore/thus 因果、moreover 递进</li>
+              <li>固定搭配优先：如 rely on、account for、contribute to</li>
+              <li>排除法 + 复现词原则（原词或同义复现）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>完形考「上下文理解」多于「单词量」；转折、因果词前后句必读。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【逻辑题】</b>He failed the exam; ____, he decided to work harder. 空格选 therefore 还是 however？</p><p class="exam__a"><strong>答案：therefore。</strong>前句失败是原因，后句更努力是结果，属因果关系，用 therefore；however 表转折。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【搭配题】</b>固定搭配 "rely ____" 后接哪个介词？</p><p class="exam__a"><strong>答案：on。</strong>rely on = 依赖，是完形与翻译的高频固定搭配。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【策略题】</b>完形填空解题的第一步是什么？</p><p class="exam__a"><strong>答案：通读全文把握主题。</strong>先了解文章主线与基调，再逐空选择，避免断章取义。</p></div>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="chapter reveal" id="ch3">
+        <div class="chapter__head"><span class="chapter__num">03</span><h2 class="chapter__title">阅读理解</h2></div>
+        <p class="chapter__lede">40 分、4 篇 20 题；主旨、细节、推断、猜词、态度五大题型。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>五大题型</h4>
+            <ul>
+              <li><span class="term">主旨题</span>：首尾段 + 各段首句归纳，警惕以偏概全</li>
+              <li><span class="term">细节题</span>：定位原文同义替换，正确选项多改写而非照抄</li>
+              <li><span class="term">推断题</span>：infer/imply 题选「含蓄但必然」的选项，忌过度引申</li>
+              <li><span class="term">猜词题</span>：回归上下文，词义由语境决定</li>
+              <li><span class="term">态度题</span>：抓评价词（positive/negative/neutral）</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>定位技巧</h4>
+            <ul>
+              <li>题文同序原则：题目顺序一般对应文章段落顺序</li>
+              <li>题干关键词定位：专有名词、数字、大写词优先</li>
+              <li>转折词后是重点：however/but/while 后常出答案</li>
+              <li>作者观点 ≠ 文中某人观点；注意引用与评价分开</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>错误选项特征</h4>
+            <ul>
+              <li>偷换概念：改换修饰词、范围扩大/缩小</li>
+              <li>无中生有：文中未提及的信息</li>
+              <li>答非所问：正确事实但不是题目所问</li>
+              <li>过度绝对：含 all/never/only 等绝对词的选项慎选</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>阅读高分 = 定位准确 + 同义替换识别 + 排除绝对化选项。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【主旨题】</b>文章首段提出「城市绿化利于健康」，后续各段分别从空气、心理、运动展开。文章主旨是？</p><p class="exam__a"><strong>答案：城市绿化对健康有多方面益处。</strong>主旨 = 首段中心句 + 各段分论点归纳，属于典型「总-分」结构。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【态度题】</b>作者在文中用 "a promising trend" 评价新政策，其态度是？</p><p class="exam__a"><strong>答案：肯定/积极。</strong>promising（有希望的）、positive、favorable 等评价词表明作者持正面态度。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【猜词题】</b>划线词 "scrutiny" 所在句 "The data came under public scrutiny"，结合上下文推断其含义最接近？</p><p class="exam__a"><strong>答案：审查、密切关注。</strong>come under scrutiny = 受到审查/密切关注，与 examination、close attention 同义。</p></div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="chapter reveal" id="ch4">
+        <div class="chapter__head"><span class="chapter__num">04</span><h2 class="chapter__title">新题型</h2></div>
+        <p class="chapter__lede">10 分：七选五、段落排序、小标题对应三种备选形式。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>七选五</h4>
+            <ul>
+              <li>空前后文逻辑：转折、因果、例证、递进</li>
+              <li>代词线索：this/that/it 指代前文内容</li>
+              <li>连接词线索：however/for example/in addition</li>
+              <li>先易后难：有明显线索的空先填</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>段落排序</h4>
+            <ul>
+              <li>首段特征：引出话题，通常不含指代上文的内容</li>
+              <li>时间线、逻辑线（问题→分析→解决）辅助排序</li>
+              <li>利用段首/段尾重复词衔接相邻段</li>
+              <li>确定首尾后向中间推进</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>小标题对应</h4>
+            <ul>
+              <li>段首主题句 + 高频词复现定标题</li>
+              <li>标题概括性 &gt; 细节性：选能覆盖全段的</li>
+              <li>警惕同段不同段共用一个选项（一个标题只用一次）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>新题型本质考「衔接与连贯」：代词、连接词、复现词是三大抓手。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【七选五】</b>前句 "Many people prefer coffee in the morning."，后句 "...it helps them stay awake."，中间空格应填含什么的句子？</p><p class="exam__a"><strong>答案：含原因/解释的句子，如 "This is because it contains caffeine."。</strong>后句 it 指代前文事物，空格需承上启下解释原因。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【排序】</b>确定文章首段最可靠的依据是？</p><p class="exam__a"><strong>答案：引出话题且不含指代上文内容的段落。</strong>首段独立引入主题，无 this/it 等指代前文的线索。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【小标题】</b>段落反复出现 "reduce stress, improve sleep, boost mood" 等高频词，最合适的标题是？</p><p class="exam__a"><strong>答案：Health Benefits（健康益处）。</strong>标题应概括全段核心，高频词均为「益处」类表达。</p></div>
+        </div>
+      </section>
+
+      <!-- 05 -->
+      <section class="chapter reveal" id="ch5">
+        <div class="chapter__head"><span class="chapter__num">05</span><h2 class="chapter__title">翻译</h2></div>
+        <p class="chapter__lede">15 分、5 句英译汉；核心是长难句拆分与通顺表达。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>翻译步骤</h4>
+            <ul>
+              <li>通读全句找谓语，确定主干</li>
+              <li>拆分从句与修饰成分，逐层理解</li>
+              <li>按中文习惯调整语序：定语前置、状语灵活</li>
+              <li>难词意译：结合上下文灵活处理，不硬译</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>高频句式</h4>
+            <ul>
+              <li>被动句：英文被动多，中文常译「被/由」或主动化</li>
+              <li>定语从句：短句前置译「……的」，长句后置或拆分</li>
+              <li>it 形式主语：it is...that 结构译「……是……」</li>
+              <li>比较结构：more...than、the more...the more</li>
+              <li>否定转移：not...because 的陷阱</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>得分要点</h4>
+            <ul>
+              <li>采分点：关键词、从句结构、逻辑关系词</li>
+              <li>通顺优先：译文要像「人话」，避免逐词死译</li>
+              <li>不空句：主干译出即有基本分</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>翻译 = 理解（拆分）+ 表达（通顺）；保证主干译对，修饰层逐步补全。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【翻译】</b>Translate: "The book was written by a young scientist."</p><p class="exam__a"><strong>答案：这本书是由一位年轻科学家写的。</strong>被动结构 was written by 译「由……写」，或主动化译「一位年轻科学家写了这本书」。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【翻译】</b>Translate: "It is important that we protect the environment."</p><p class="exam__a"><strong>答案：保护环境很重要。</strong>it 形式主语结构译「……很重要」，that 从句译为主语。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【翻译】</b>Translate: "People who exercise regularly tend to live longer."</p><p class="exam__a"><strong>答案：经常锻炼的人往往活得更久。</strong>定语从句 who exercise regularly 短而前置译「经常锻炼的」修饰 people。</p></div>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section class="chapter reveal" id="ch6">
+        <div class="chapter__head"><span class="chapter__num">06</span><h2 class="chapter__title">写作</h2></div>
+        <p class="chapter__lede">30 分：小作文 10 分（应用文）+ 大作文 20 分（图画/图表）。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>小作文（应用文）</h4>
+            <ul>
+              <li>类型：书信（建议、邀请、道歉、申请）、通知、备忘录</li>
+              <li>格式：称呼、正文、结尾敬语、署名缺一不可</li>
+              <li>三段式：表明目的 → 具体内容 → 礼貌收尾</li>
+              <li>常用句：I am writing to...、I would appreciate it if...</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>大作文（图画/图表）</h4>
+            <ul>
+              <li>图画作文（英一）：描述图画 → 揭示寓意 → 评论建议</li>
+              <li>图表作文（英二）：描述数据 → 分析原因 → 总结展望</li>
+              <li>首段描述：As is vividly depicted in the picture...、According to the chart</li>
+              <li>中段论证：原因分析 + 举例 + 对比</li>
+              <li>尾段：总结观点 + 呼吁/建议</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>模板与提分</h4>
+            <ul>
+              <li>积累万能句型与高级表达：强调句、倒装、从句</li>
+              <li>连接词使行文流畅：first of all、moreover、in conclusion</li>
+              <li>词汇升级：important→crucial，many→numerous</li>
+              <li>卷面工整、字数达标（小作文约 100 词、大作文约 160-200 词）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>写作三要素：结构（三段式）、语言（高级句式）、内容（切题不跑题）。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【小作文】</b>写一封建议信的开头句：向朋友建议学习方法。</p><p class="exam__a"><strong>答案示例：I am writing to offer you some suggestions on how to study effectively.</strong>建议信开头明确目的：I am writing to... + 建议主题。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【大作文】</b>图画作文首段应完成什么任务？</p><p class="exam__a"><strong>答案：描述图画内容。</strong>用 As is vividly depicted in the picture... 描述画面细节，切忌开头直接谈寓意。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【提分】</b>「重要」一词更高级的表达是？</p><p class="exam__a"><strong>答案：crucial / essential / significant。</strong>词汇升级是写作提分的常用手段，避免通篇 important。</p></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span class="footer__brand">ENG NOTES</span>
+    <span>考研英语知识点全梳理 </span>
+    <span>词汇为砖，语法为梁</span>
+  </div>
+</footer>
+
+<button class="totop" id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('engCanvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, words = [];
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var SAMPLE = ['READ','WRITE','WORD','GRAMMAR','PARAGRAPH','THESIS','IDEA','STYLE','ARGUE','EVIDENCE','VOICE','TONE','PROSE','QUOTE','CLAUSE','VERB','NOUN','METAPHOR','OUTLINE','DRAFT'];
+  function seed(){
+    W = canvas.parentElement.getBoundingClientRect().width;
+    H = canvas.parentElement.getBoundingClientRect().height;
+    words = [];
+    for(var i=0;i<Math.min(26, Math.round(W/46));i++){
+      words.push({x:Math.random()*W, y:Math.random()*H, s:9+Math.random()*16, t:SAMPLE[Math.floor(Math.random()*SAMPLE.length)], o:.05+Math.random()*.12, ph:Math.random()*Math.PI*2, sp:.3+Math.random()*.8});
+    }
+  }
+  function resize(){
+    var rect = canvas.parentElement.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+  }
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<words.length;i++){
+      var w=words[i];
+      var a = w.ph + (t/1400)*w.sp;
+      var x = w.x + Math.cos(a)*10, y = w.y + Math.sin(a)*8;
+      ctx.font = '600 '+w.s+'px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(94,200,255,'+w.o+')';
+      ctx.fillText(w.t, x, y);
+    }
+    requestAnimationFrame(draw);
+  }
+  if(!reduce){ resize(); window.addEventListener('resize', resize); requestAnimationFrame(draw); }
+  else {
+    var rect=canvas.parentElement.getBoundingClientRect();
+    W=rect.width; H=rect.height;
+    canvas.width=W*DPR; canvas.height=H*DPR;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+    for(var i=0;i<words.length;i++){ var w=words[i]; ctx.font='600 '+w.s+'px "JetBrains Mono", monospace'; ctx.fillStyle='rgba(94,200,255,'+w.o+')'; ctx.fillText(w.t,w.x,w.y); }
+  }
+
+  var tocLinks = document.querySelectorAll('.toc a');
+  var sections = [];
+  tocLinks.forEach(function(a){ sections.push(document.querySelector(a.getAttribute('href'))); });
+  var toTop = document.getElementById('toTop');
+  var ticking = false;
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(function(){
+        ticking = false;
+        var pos = window.scrollY + 120;
+        var current = sections[0];
+        sections.forEach(function(s){ if(s.offsetTop <= pos) current = s; });
+        tocLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current.id); });
+        toTop.classList.toggle('show', window.scrollY > 600);
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: reduce?'auto':'smooth'}); });
+  onScroll();
+
+  var reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.08});
+    reveals.forEach(function(el){ io.observe(el); });
+  } else { reveals.forEach(function(el){ el.classList.add('in'); }); }
+})();
+</script>
+</body>
+</html>

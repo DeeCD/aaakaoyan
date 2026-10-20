@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>计算机组成原理知识点全梳理 · CO NOTES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#161210; --panel:#26201B; --panel2:#1E1815;
+    --signal:#B79CFF; --data:#F2B04A; --volt:#8AD6C0;
+    --paper:#F7EFE7; --muted:#B3A18F; --line:#3A2F28; --lineb:#5A4A3E;
+    --radius:14px; --shadow:0 18px 40px rgba(10,5,3,.5);
+    --fd:"Space Grotesk","Noto Sans SC",sans-serif;
+    --fb:"Noto Sans SC",system-ui,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{background:var(--bg);color:var(--paper);font-family:var(--fb);font-size:16px;line-height:1.75;overflow-x:hidden}
+  ::selection{background:var(--signal);color:var(--bg)}
+  :focus-visible{outline:3px solid var(--signal);outline-offset:2px;border-radius:4px}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+
+  .topbar{position:sticky;top:0;z-index:60;background:rgba(22,18,16,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .topbar__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 0}
+  .brand{display:flex;align-items:center;gap:.7rem;font-family:var(--fd);font-weight:700;font-size:1.05rem}
+  .brand__dot{width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(183,156,255,.18),0 0 18px rgba(183,156,255,.8);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.82)}}
+  .brand em{font-style:normal;color:var(--muted);font-weight:400;font-size:.85rem}
+  .topbar__links{display:flex;gap:1.2rem;font-size:.9rem;font-weight:500}
+  .topbar__links a{color:var(--muted);transition:color .2s}
+  .topbar__links a:hover{color:var(--signal)}
+  .topbar__btn{font-family:var(--fd);font-weight:600;font-size:.9rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--lineb);color:var(--signal);transition:background .2s,border-color .2s,transform .15s}
+  .topbar__btn:hover{background:rgba(183,156,255,.08);border-color:var(--signal);transform:translateY(-1px)}
+
+  .hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+  .hero__content{position:relative;z-index:1;padding:5.5rem 0 4.5rem;max-width:800px}
+  .hero__kick{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.82rem;letter-spacing:.08em;color:var(--signal);border:1px solid rgba(183,156,255,.4);border-radius:999px;padding:.3rem .8rem;background:rgba(183,156,255,.06);margin-bottom:1.4rem}
+  .hero__kick i{width:7px;height:7px;border-radius:50%;background:var(--signal);display:inline-block;animation:pulse 2s infinite}
+  .hero__title{font-family:var(--fd);font-size:clamp(2.3rem,6.4vw,4.6rem);line-height:1.08;letter-spacing:-.02em;font-weight:700}
+  .hero__title span{color:var(--signal)}
+  .hero__sub{margin-top:1.2rem;font-size:clamp(1rem,2vw,1.15rem);color:var(--muted);max-width:62ch}
+  .hero__stats{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.2rem}
+  .stat{border:1px solid var(--lineb);border-radius:12px;background:rgba(38,32,27,.7);padding:.7rem 1.1rem;display:flex;flex-direction:column;min-width:120px}
+  .stat b{font-family:var(--fd);font-weight:700;font-size:1.5rem;color:var(--volt);line-height:1.1}
+  .stat span{font-size:.8rem;color:var(--muted)}
+
+  .layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:2.4rem;padding:2.8rem 0 4rem}
+  .toc{position:sticky;top:92px;align-self:start;border:1px solid var(--line);border-radius:var(--radius);background:rgba(38,32,27,.55);padding:1rem 0;max-height:calc(100vh - 120px);overflow-y:auto}
+  .toc__title{font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--muted);padding:0 1.2rem .8rem;border-bottom:1px solid var(--line);margin-bottom:.6rem}
+  .toc a{display:flex;align-items:center;gap:.65rem;padding:.45rem 1.2rem;font-size:.9rem;font-weight:500;color:var(--muted);border-left:3px solid transparent;transition:color .18s,border-color .18s,background .18s}
+  .toc a .toc__n{font-family:var(--fm);font-size:.75rem;color:var(--lineb)}
+  .toc a:hover{color:var(--paper);background:rgba(183,156,255,.05)}
+  .toc a.active{color:var(--signal);border-left-color:var(--signal);background:rgba(183,156,255,.07)}
+  .toc a.active .toc__n{color:var(--signal)}
+  .content{min-width:0}
+  .content section{scroll-margin-top:96px}
+
+  .chapter{margin-bottom:3.6rem}
+  .chapter__head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.4rem}
+  .chapter__num{font-family:var(--fd);font-weight:700;font-size:1.05rem;color:var(--signal);border:1px solid rgba(183,156,255,.45);border-radius:8px;padding:.15rem .55rem;white-space:nowrap}
+  .chapter__title{font-family:var(--fd);font-weight:700;font-size:clamp(1.5rem,3.6vw,2.2rem);letter-spacing:-.01em}
+  .chapter__lede{color:var(--muted);font-size:.98rem;max-width:72ch;margin-bottom:1.6rem}
+  .chapter__rule{border:none;border-top:1px solid var(--line);margin:0 0 1.6rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem}
+  .card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:1.2rem 1.3rem;transition:border-color .2s,transform .18s,box-shadow .25s}
+  .card:hover{border-color:var(--lineb);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .card h4{font-family:var(--fd);font-weight:600;font-size:1.05rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+  .card h4::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--signal);flex-shrink:0}
+  .card--data h4::before{background:var(--data)}
+  .card--volt h4::before{background:var(--volt)}
+  .card p{font-size:.92rem;color:var(--muted)}
+  .card p strong{color:var(--paper);font-weight:500}
+  .card ul{margin-top:.6rem;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:.35rem}
+  .card li{font-size:.9rem;color:var(--muted);position:relative;padding-left:1.1rem}
+  .card li::before{content:"▹";position:absolute;left:0;color:var(--signal)}
+  .card--data li::before{color:var(--data)}
+
+  .term{font-family:var(--fm);font-size:.88em;color:var(--signal);background:rgba(183,156,255,.08);border:1px solid rgba(183,156,255,.25);border-radius:6px;padding:.02em .4em;white-space:nowrap}
+  .term--data{color:var(--data);background:rgba(242,176,74,.08);border-color:rgba(242,176,74,.28)}
+  .term--volt{color:var(--volt);background:rgba(138,214,192,.08);border-color:rgba(138,214,192,.28)}
+  .note{border:1px solid var(--lineb);border-left:4px solid var(--volt);border-radius:10px;background:rgba(138,214,192,.05);padding:.9rem 1.1rem;font-size:.92rem;color:var(--muted);margin:1.2rem 0}
+  .note strong{color:var(--volt);font-weight:600}
+
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);margin:1.2rem 0}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+  thead th{background:var(--panel2);font-family:var(--fd);font-weight:600;text-align:left;padding:.8rem 1rem;color:var(--paper);font-size:.88rem;border-bottom:1px solid var(--lineb);white-space:nowrap}
+  tbody td{padding:.7rem 1rem;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(183,156,255,.035)}
+  tbody td:first-child{color:var(--signal);font-family:var(--fm);font-size:.85rem;white-space:nowrap}
+  tbody td strong{color:var(--paper);font-weight:500}
+
+  .fact{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin:1.2rem 0}
+  .fact__item{border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;background:rgba(38,32,27,.45)}
+  .fact__item b{display:block;font-family:var(--fd);font-weight:700;font-size:1.35rem;color:var(--volt);line-height:1.2;margin-bottom:.3rem}
+  .fact__item span{font-size:.86rem;color:var(--muted)}
+
+  .exam{border:1px solid rgba(138,214,192,.32);border-left:4px solid var(--volt);border-radius:var(--radius);background:rgba(138,214,192,.05);padding:1.1rem 1.2rem;margin-top:1.7rem}
+  .exam__head{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+  .exam__tag{font-family:var(--fd);font-weight:700;font-size:.76rem;letter-spacing:.1em;color:var(--bg);background:var(--volt);border-radius:6px;padding:.14rem .55rem;white-space:nowrap}
+  .exam__title{font-family:var(--fd);font-weight:600;font-size:.92rem;color:var(--volt)}
+  .exam__item{border:1px solid var(--line);border-radius:10px;background:rgba(38,32,27,.6);padding:.85rem 1rem;margin-top:.65rem}
+  .exam__q{font-size:.9rem;color:var(--paper);margin-bottom:.35rem}
+  .exam__q b{color:var(--volt);font-weight:600}
+  .exam__a{font-size:.87rem;color:var(--muted)}
+  .exam__a strong{color:var(--signal);font-weight:600}
+
+  .footer{border-top:1px solid var(--line);background:var(--panel2)}
+  .footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.6rem 0 2rem;font-size:.85rem;color:var(--muted)}
+  .footer__brand{font-family:var(--fd);color:var(--signal);font-weight:600}
+
+  .totop{position:fixed;right:22px;bottom:22px;z-index:70;width:46px;height:46px;border-radius:12px;border:1px solid var(--lineb);background:var(--panel);color:var(--signal);font-size:1.2rem;cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s,background .2s,border-color .2s;box-shadow:var(--shadow)}
+  .totop.show{opacity:1;transform:none;pointer-events:auto}
+  .totop:hover{background:var(--signal);color:var(--bg);border-color:var(--signal)}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .mnav{display:none}
+  @media(max-width:920px){
+    .layout{grid-template-columns:1fr}
+    .toc{position:static;max-height:none;margin-bottom:1.4rem}
+    .toc__list{display:grid;grid-template-columns:1fr 1fr;gap:.1rem}
+    .topbar__links{display:none}
+    .mnav{display:inline-flex}
+    .hero__content{padding:3.6rem 0 3rem}
+  }
+  @media(max-width:560px){
+    .wrap{width:calc(100% - 28px)}
+    .toc__list{grid-template-columns:1fr}
+    .hero__stats{gap:.6rem}
+    .stat{min-width:104px;padding:.6rem .8rem}
+    .stat b{font-size:1.25rem}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .brand__dot,.hero__kick i{animation:none}
+    .reveal{opacity:1;transform:none;transition:none}
+    .card,.totop,.topbar__btn{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#top"><span class="brand__dot"></span> CO NOTES <em>计算机组成原理知识全梳理</em></a>
+    <nav class="topbar__links" aria-label="快捷导航">
+      <a href="#ch1">概论</a><a href="#ch2">数据</a><a href="#ch3">存储</a><a href="#ch4">指令</a><a href="#ch5">CPU</a><a href="#ch6">总线IO</a>
+    </nav>
+    <a class="topbar__btn mnav" href="#toc">目录</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <canvas class="hero__canvas" id="coCanvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero__content">
+      <span class="hero__kick"><i></i> 单文件 · 零依赖 · 可离线阅读</span>
+      <h1 class="hero__title">计算机组成原理<span>全量考点</span>：数据·存储·CPU·总线一张通</h1>
+      <p class="hero__sub">按 408 考纲主线整理六章全量知识：系统概论、数据的表示与运算、存储系统、指令系统、中央处理器、总线与 I/O。章末附考研真题。</p>
+      <div class="hero__stats">
+        <div class="stat"><b>6</b><span>知识章节</span></div>
+        <div class="stat"><b>2^32</b><span>地址空间</span></div>
+        <div class="stat"><b>45</b><span>考纲分值</span></div>
+        <div class="stat"><b>5</b><span>流水段</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="layout">
+
+    <aside class="toc" id="toc">
+      <p class="toc__title">章节目录</p>
+      <div class="toc__list">
+        <a href="#ch1"><span class="toc__n">01</span> 计算机系统概论</a>
+        <a href="#ch2"><span class="toc__n">02</span> 数据表示与运算</a>
+        <a href="#ch3"><span class="toc__n">03</span> 存储系统</a>
+        <a href="#ch4"><span class="toc__n">04</span> 指令系统</a>
+        <a href="#ch5"><span class="toc__n">05</span> 中央处理器</a>
+        <a href="#ch6"><span class="toc__n">06</span> 总线与 I/O</a>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- 01 -->
+      <section class="chapter reveal" id="ch1">
+        <div class="chapter__head"><span class="chapter__num">01</span><h2 class="chapter__title">计算机系统概论</h2></div>
+        <p class="chapter__lede">冯·诺依曼结构、层次结构与性能指标是全局地图。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>冯·诺依曼结构</h4>
+            <ul>
+              <li>存储程序 + 程序控制</li>
+              <li>五大部件：运算器、控制器、存储器、输入、输出</li>
+              <li>指令和数据以二进制同等存储</li>
+              <li>指令由操作码 + 地址码组成</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>计算机层次结构</h4>
+            <ul>
+              <li>硬件层：微程序/硬布线、机器语言</li>
+              <li>软件层：汇编 → 高级语言 → 应用</li>
+              <li>翻译方式：编译（整体翻译）、解释（逐句）</li>
+              <li>系统软件 vs 应用软件</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>性能指标</h4>
+            <ul>
+              <li><span class="term">CPI</span>：执行一条指令平均时钟周期数</li>
+              <li>CPU 执行时间 = 指令数 × CPI × 时钟周期</li>
+              <li><span class="term">MIPS</span> = 主频/(CPI×10⁶)；MFLOPS 衡量浮点</li>
+              <li>主频、IPS、吞吐率的关系与换算</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>CPU 时间 = IC × CPI × T；主频越高单位时间周期越多，但 CPI 不随之改变。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>冯·诺依曼计算机的核心思想是？</p><p class="exam__a"><strong>答案：存储程序与程序控制。</strong>指令和数据以二进制形式存储于存储器中，机器自动逐条执行。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>主频 2GHz，CPI=2，执行 10⁸ 条指令需要多少时间？</p><p class="exam__a"><strong>答案：0.1s。</strong>T = IC×CPI/主频 = 10⁸×2/(2×10⁹) = 0.1s。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>CPI 的含义是什么？</p><p class="exam__a"><strong>答案：每条指令平均执行的时钟周期数（Cycles Per Instruction）。</strong>CPI 越小性能越高，CPU 时间 = 指令数 × CPI × 时钟周期。</p></div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="chapter reveal" id="ch2">
+        <div class="chapter__head"><span class="chapter__num">02</span><h2 class="chapter__title">数据的表示与运算</h2></div>
+        <p class="chapter__lede">原反补移码、IEEE754、ALU——计算题重灾区。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>数制与编码</h4>
+            <ul>
+              <li>进制转换：二、八、十、十六进制互转</li>
+              <li><span class="term">BCD 码</span>：8421 码等十进制编码</li>
+              <li>定点数：无符号、带符号（原码/反码/补码）</li>
+              <li>补码特性：0 唯一表示、减法变加法</li>
+              <li><span class="term">移码</span>：补码符号位取反，用于阶码</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>浮点数 IEEE754</h4>
+            <ul>
+              <li>格式：符号位 S + 阶码 E（移码）+ 尾数 M（原码）</li>
+              <li>单精度 32 位：1+8+23；双精度 64 位：1+11+52</li>
+              <li>规格化：尾数最高位为 1（隐含位）</li>
+              <li>浮点运算：对阶（小阶向大阶看齐）→ 尾数运算 → 规格化 → 舍入 → 判溢出</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>运算器</h4>
+            <ul>
+              <li><span class="term">ALU</span>：算术逻辑单元，核心组合逻辑电路</li>
+              <li>加法器：串行进位、并行进位（先行进位 CLA）</li>
+              <li>溢出判断：双符号位法、单符号位进位法</li>
+              <li>乘法：原码一位乘、补码 Booth 算法</li>
+              <li>除法：恢复余数法、不恢复余数法</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>补码转真值：符号位不变、数值位取反加一；规格化浮点数尾数在 [1,2) 或 (0.5,1]。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>8 位补码表示 -13，其补码为？</p><p class="exam__a"><strong>答案：11110011。</strong>13=00001101，取反 11110010 加 1 得 11110011。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>IEEE754 单精度浮点数的阶码采用什么编码？</p><p class="exam__a"><strong>答案：移码（偏置 127）。</strong>单精度阶码 8 位用移码表示，偏置值 127，便于比较大小。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>浮点数加减运算的第一步是什么？</p><p class="exam__a"><strong>答案：对阶。</strong>小阶向大阶看齐，阶码小的尾数右移相应位数，使两数阶码一致后再进行尾数运算。</p></div>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="chapter reveal" id="ch3">
+        <div class="chapter__head"><span class="chapter__num">03</span><h2 class="chapter__title">存储系统</h2></div>
+        <p class="chapter__lede">Cache、主存、虚存三级结构；命中率计算与地址映射。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>存储器层次</h4>
+            <ul>
+              <li>寄存器 → Cache → 主存 → 磁盘/辅存</li>
+              <li>速度递增：寄存器最快；容量递增：辅存最大</li>
+              <li>SRAM（Cache）：速度快、集成度低、贵</li>
+              <li>DRAM（主存）：需刷新、集成度高、便宜</li>
+              <li>ROM：只读，PROM/EPROM/EEPROM/Flash</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>主存与芯片扩展</h4>
+            <ul>
+              <li>地址线、数据线、片选信号与芯片连接</li>
+              <li>位扩展、字扩展、字位同时扩展</li>
+              <li>存储器带宽 = 频率 × 位宽 / 8</li>
+              <li>多模块交叉编址：高位交叉、低位交叉</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>Cache</h4>
+            <ul>
+              <li><span class="term">地址映射</span>：直接映射、全相联、组相联</li>
+              <li>替换算法：LRU、FIFO、随机</li>
+              <li>写策略：写直达、写回法</li>
+              <li>命中率与平均访问时间计算：T = h×Tc + (1−h)×Tm</li>
+              <li>Cache 行数、标记位位数计算</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>虚拟存储器</h4>
+            <ul>
+              <li>页式虚存：页表、快表 TLB</li>
+              <li>页式/段式/段页式管理</li>
+              <li>缺页处理与页面置换（与 OS 章节呼应）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>平均访存时间公式：T = h·Tc + (1−h)·Tm；主存地址 = 标记 + Cache 行号 + 块内地址（直接映射）。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>Cache 命中率 0.95，Cache 访问 2ns，主存 10ns，平均访问时间为？</p><p class="exam__a"><strong>答案：2.4ns。</strong>T = 0.95×2 + 0.05×10 = 1.9 + 0.5 = 2.4ns。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>Cache 与主存之间采用什么映射方式时，主存地址中的标记字段最短？</p><p class="exam__a"><strong>答案：全相联映射。</strong>全相联任一块可装入任意 Cache 行，无需行号字段，标记字段最长而非最短；直接映射标记字段最短（本题问法注意辨析：直接映射标记位数最少）。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>为什么 Cache 采用 SRAM 而主存采用 DRAM？</p><p class="exam__a"><strong>答案：</strong>Cache 需极快访问速度故用 SRAM（无需刷新、速度快但贵）；主存容量大需成本低，用 DRAM（需定期刷新、集成度高）。</p></div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="chapter reveal" id="ch4">
+        <div class="chapter__head"><span class="chapter__num">04</span><h2 class="chapter__title">指令系统</h2></div>
+        <p class="chapter__lede">指令格式、寻址方式与 CISC/RISC 对比。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>指令格式</h4>
+            <ul>
+              <li>组成：操作码 OP + 地址码 A</li>
+              <li>零/一/二/三地址指令：地址码数量影响指令长度</li>
+              <li>定长指令 vs 变长指令</li>
+              <li>扩展操作码：操作码长度可变，扩大指令数</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>寻址方式</h4>
+            <ul>
+              <li><span class="term">立即寻址</span>：操作数在指令中，快但范围小</li>
+              <li><span class="term">直接寻址</span>：地址码即操作数地址</li>
+              <li><span class="term">间接寻址</span>：地址码指向存放地址的单元</li>
+              <li><span class="term">寄存器寻址</span>：操作数在寄存器中</li>
+              <li><span class="term">寄存器间接</span>、基址/变址寻址、相对寻址</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>CISC vs RISC</h4>
+            <ul>
+              <li>CISC：指令复杂多、寻址多、微程序控制、兼容强</li>
+              <li>RISC：指令精简定长、寄存器多、Load/Store、流水线友好</li>
+              <li>对比表是高频选择题</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>相对寻址用于转移指令（PC+偏移）；基址寻址用于程序定位，变址寻址用于数组遍历。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>操作数直接包含在指令中的寻址方式是？</p><p class="exam__a"><strong>答案：立即寻址。</strong>立即数随指令取出即得操作数，无需访存，但数值范围受指令字段宽度限制。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>相对寻址的有效地址如何计算？</p><p class="exam__a"><strong>答案：EA = (PC) + 位移量。</strong>以程序计数器 PC 当前值为基准加偏移量，便于程序浮动。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>RISC 机器的主要特点不包括？</p><p class="exam__a"><strong>答案：指令长度不固定（错误选项）。</strong>RISC 指令定长、格式规整、寄存器丰富、采用 Load/Store 结构，便于流水线。</p></div>
+        </div>
+      </section>
+
+      <!-- 05 -->
+      <section class="chapter reveal" id="ch5">
+        <div class="chapter__head"><span class="chapter__num">05</span><h2 class="chapter__title">中央处理器</h2></div>
+        <p class="chapter__lede">数据通路、控制器、指令流水线——CPU 的核心运作。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>CPU 结构与数据通路</h4>
+            <ul>
+              <li>组成：运算器（ALU+寄存器）+ 控制器（PC、IR、时序）</li>
+              <li>寄存器：PC（程序计数器）、IR（指令寄存器）、ACC、MAR、MDR</li>
+              <li>数据通路：专用通路 vs CPU 内部总线</li>
+              <li>指令周期：取指→间址→执行→中断</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>控制器</h4>
+            <ul>
+              <li>硬布线控制：组合逻辑，快但难改，RISC 常用</li>
+              <li>微程序控制：微指令序列，灵活，CISC 常用</li>
+              <li>微指令格式：操作控制字段 + 下地址字段</li>
+              <li>微命令、微操作、微程序的关系</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>指令流水线</h4>
+            <ul>
+              <li>五段流水：IF→ID→EX→MEM→WB</li>
+              <li>理想加速比 = 段数 k；实际受冒险限制</li>
+              <li>三类冒险：结构冒险、数据冒险、控制冒险</li>
+              <li>解决：转发（旁路）、暂停（气泡）、分支预测</li>
+              <li>流水线吞吐率 = n/(k+n−1) 个周期</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>流水线周期取各段中最长；数据冒险用转发消除，控制冒险靠分支预测/延迟槽。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>五段流水线，每段 100ns，执行 100 条指令的理想时间为？</p><p class="exam__a"><strong>答案：10400ns。</strong>T = (k+n−1)×Δt = (5+100−1)×100 = 10400ns。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>「后一条指令需要使用前一条指令的运算结果」属于哪种冒险？</p><p class="exam__a"><strong>答案：数据冒险。</strong>数据相关导致的冲突，可用转发技术消除大部分。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>微程序控制与硬布线控制的区别？</p><p class="exam__a"><strong>答案：</strong>微程序控制用微指令序列（存储逻辑）实现，灵活易修改、速度较慢；硬布线用组合逻辑电路实现，速度快但修改困难。</p></div>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section class="chapter reveal" id="ch6">
+        <div class="chapter__head"><span class="chapter__num">06</span><h2 class="chapter__title">总线与 I/O</h2></div>
+        <p class="chapter__lede">总线仲裁、I/O 控制方式与常用接口标准。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>总线基础</h4>
+            <ul>
+              <li>总线分类：数据总线、地址总线、控制总线</li>
+              <li>片内总线、系统总线、通信总线（层次）</li>
+              <li>总线特性：物理、功能、电气、时间</li>
+              <li>总线带宽 = 总线宽度 × 工作频率 / 8</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>总线仲裁与定时</h4>
+            <ul>
+              <li>集中仲裁：链式查询、计数器定时查询、独立请求</li>
+              <li>分布仲裁：各设备自判优先级</li>
+              <li>同步定时（固定时钟）vs 异步定时（应答握手）</li>
+              <li>总线周期：申请→仲裁→传输→结束</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>I/O 方式与接口</h4>
+            <ul>
+              <li>程序查询、中断方式、DMA、通道（与 OS 呼应）</li>
+              <li>DMA 周期挪用、块传输</li>
+              <li>常用接口：USB、PCIe、SATA、HDMI</li>
+              <li>I/O 端口编址：统一编址（内存映射）、独立编址</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>总线带宽 = 频率 × 位宽 / 8；DMA 传送成块数据最省 CPU。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>32 位数据总线、频率 100MHz，总线带宽为？</p><p class="exam__a"><strong>答案：400MB/s。</strong>带宽 = 32/8 × 100MHz = 4B × 100M = 400MB/s。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>下列 I/O 控制方式中，CPU 干预最少的是？</p><p class="exam__a"><strong>答案：DMA（通道）方式。</strong>DMA 控制器直接与主存交换数据块，仅在传输开始和结束时中断 CPU。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>链式查询仲裁的特点？</p><p class="exam__a"><strong>答案：</strong>所有设备共享一根总线请求线，优先级由物理位置决定，靠近仲裁器的设备优先级高，结构简单但扩展受限。</p></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span class="footer__brand">CO NOTES</span>
+    <span>计算机组成原理知识点全梳理 </span>
+    <span>数据流动，指令驱动</span>
+  </div>
+</footer>
+
+<button class="totop" id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('coCanvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, chips = [], traces = [];
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function seed(){
+    var count = Math.max(3, Math.round(W / 240));
+    chips = [];
+    for(var i=0;i<count;i++){ chips.push({x:60+Math.random()*(W-120), y:40+Math.random()*(H-80), w:70+Math.random()*50, h:40+Math.random()*30}); }
+    traces = [];
+    for(var i=0;i<chips.length-1;i++){
+      for(var j=i+1;j<chips.length;j++){
+        if(Math.random()<.6) traces.push({a:chips[i], b:chips[j], ph:Math.random()*Math.PI*2});
+      }
+    }
+  }
+  function resize(){
+    var rect = canvas.parentElement.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+  }
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    var i;
+    for(i=0;i<traces.length;i++){
+      var tr=traces[i], ax=tr.a.x+tr.a.w/2, ay=tr.a.y+tr.a.h/2, bx=tr.b.x+tr.b.w/2, by=tr.b.y+tr.b.h/2;
+      ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by);
+      ctx.strokeStyle='rgba(242,176,74,.18)'; ctx.lineWidth=1.5; ctx.stroke();
+      var p = ((t/1400 + tr.ph) % 1);
+      var x = ax+(bx-ax)*p, y = ay+(by-ay)*p;
+      ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fillStyle='rgba(183,156,255,.9)'; ctx.fill();
+    }
+    for(i=0;i<chips.length;i++){
+      var c=chips[i];
+      ctx.beginPath(); ctx.roundRect(c.x,c.y,c.w,c.h,6);
+      ctx.fillStyle='rgba(138,214,192,.08)'; ctx.fill();
+      ctx.strokeStyle='rgba(138,214,192,.45)'; ctx.lineWidth=1.5; ctx.stroke();
+      for(var pin=0;pin<4;pin++){
+        ctx.beginPath(); ctx.arc(c.x+8+pin*14,c.y-5,2,0,Math.PI*2); ctx.fillStyle='rgba(183,156,255,.6)'; ctx.fill();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  if(!reduce){ resize(); window.addEventListener('resize', resize); requestAnimationFrame(draw); }
+  else {
+    var rect=canvas.parentElement.getBoundingClientRect();
+    W=rect.width; H=rect.height;
+    canvas.width=W*DPR; canvas.height=H*DPR;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+    for(var i=0;i<chips.length;i++){ var c=chips[i]; ctx.beginPath(); ctx.roundRect(c.x,c.y,c.w,c.h,6); ctx.fillStyle='rgba(138,214,192,.08)'; ctx.fill(); ctx.strokeStyle='rgba(138,214,192,.45)'; ctx.stroke(); }
+    for(var j=0;j<traces.length;j++){ var tr=traces[j], ax=tr.a.x+tr.a.w/2, ay=tr.a.y+tr.a.h/2, bx=tr.b.x+tr.b.w/2, by=tr.b.y+tr.b.h/2; ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.strokeStyle='rgba(242,176,74,.18)'; ctx.stroke(); }
+  }
+
+  var tocLinks = document.querySelectorAll('.toc a');
+  var sections = [];
+  tocLinks.forEach(function(a){ sections.push(document.querySelector(a.getAttribute('href'))); });
+  var toTop = document.getElementById('toTop');
+  var ticking = false;
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(function(){
+        ticking = false;
+        var pos = window.scrollY + 120;
+        var current = sections[0];
+        sections.forEach(function(s){ if(s.offsetTop <= pos) current = s; });
+        tocLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current.id); });
+        toTop.classList.toggle('show', window.scrollY > 600);
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: reduce?'auto':'smooth'}); });
+  onScroll();
+
+  var reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.08});
+    reveals.forEach(function(el){ io.observe(el); });
+  } else { reveals.forEach(function(el){ el.classList.add('in'); }); }
+})();
+</script>
+</body>
+</html>

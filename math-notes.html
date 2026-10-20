@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考研数学一知识点全梳理 · MATH NOTES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1E; --panel:#111A33; --panel2:#0E1530;
+    --signal:#4FE3C1; --data:#6C8CFF; --volt:#FFC857;
+    --paper:#E8EEFA; --muted:#93A3C6; --line:#263252; --lineb:#3A4A78;
+    --radius:14px; --shadow:0 18px 40px rgba(2,6,18,.45);
+    --fd:"Space Grotesk","Noto Sans SC",sans-serif;
+    --fb:"Noto Sans SC",system-ui,sans-serif;
+    --fm:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{background:var(--bg);color:var(--paper);font-family:var(--fb);font-size:16px;line-height:1.75;overflow-x:hidden}
+  ::selection{background:var(--signal);color:var(--bg)}
+  :focus-visible{outline:3px solid var(--signal);outline-offset:2px;border-radius:4px}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+
+  .topbar{position:sticky;top:0;z-index:60;background:rgba(10,15,30,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .topbar__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 0}
+  .brand{display:flex;align-items:center;gap:.7rem;font-family:var(--fd);font-weight:700;font-size:1.05rem}
+  .brand__dot{width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(79,227,193,.18),0 0 18px rgba(79,227,193,.8);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.82)}}
+  .brand em{font-style:normal;color:var(--muted);font-weight:400;font-size:.85rem}
+  .topbar__links{display:flex;gap:1.2rem;font-size:.9rem;font-weight:500}
+  .topbar__links a{color:var(--muted);transition:color .2s}
+  .topbar__links a:hover{color:var(--signal)}
+  .topbar__btn{font-family:var(--fd);font-weight:600;font-size:.9rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--lineb);color:var(--signal);transition:background .2s,border-color .2s,transform .15s}
+  .topbar__btn:hover{background:rgba(79,227,193,.08);border-color:var(--signal);transform:translateY(-1px)}
+
+  .hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+  .hero__content{position:relative;z-index:1;padding:5.5rem 0 4.5rem;max-width:800px}
+  .hero__kick{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.82rem;letter-spacing:.08em;color:var(--signal);border:1px solid rgba(79,227,193,.4);border-radius:999px;padding:.3rem .8rem;background:rgba(79,227,193,.06);margin-bottom:1.4rem}
+  .hero__kick i{width:7px;height:7px;border-radius:50%;background:var(--signal);display:inline-block;animation:pulse 2s infinite}
+  .hero__title{font-family:var(--fd);font-size:clamp(2.3rem,6.4vw,4.6rem);line-height:1.08;letter-spacing:-.02em;font-weight:700}
+  .hero__title span{color:var(--signal)}
+  .hero__sub{margin-top:1.2rem;font-size:clamp(1rem,2vw,1.15rem);color:var(--muted);max-width:62ch}
+  .hero__stats{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.2rem}
+  .stat{border:1px solid var(--lineb);border-radius:12px;background:rgba(17,26,51,.7);padding:.7rem 1.1rem;display:flex;flex-direction:column;min-width:120px}
+  .stat b{font-family:var(--fd);font-weight:700;font-size:1.5rem;color:var(--volt);line-height:1.1}
+  .stat span{font-size:.8rem;color:var(--muted)}
+
+  .layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:2.4rem;padding:2.8rem 0 4rem}
+  .toc{position:sticky;top:92px;align-self:start;border:1px solid var(--line);border-radius:var(--radius);background:rgba(17,26,51,.55);padding:1rem 0;max-height:calc(100vh - 120px);overflow-y:auto}
+  .toc__title{font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--muted);padding:0 1.2rem .8rem;border-bottom:1px solid var(--line);margin-bottom:.6rem}
+  .toc a{display:flex;align-items:center;gap:.65rem;padding:.45rem 1.2rem;font-size:.9rem;font-weight:500;color:var(--muted);border-left:3px solid transparent;transition:color .18s,border-color .18s,background .18s}
+  .toc a .toc__n{font-family:var(--fm);font-size:.75rem;color:var(--lineb)}
+  .toc a:hover{color:var(--paper);background:rgba(79,227,193,.05)}
+  .toc a.active{color:var(--signal);border-left-color:var(--signal);background:rgba(79,227,193,.07)}
+  .toc a.active .toc__n{color:var(--signal)}
+  .content{min-width:0}
+  .content section{scroll-margin-top:96px}
+
+  .chapter{margin-bottom:3.6rem}
+  .chapter__head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.4rem}
+  .chapter__num{font-family:var(--fd);font-weight:700;font-size:1.05rem;color:var(--signal);border:1px solid rgba(79,227,193,.45);border-radius:8px;padding:.15rem .55rem;white-space:nowrap}
+  .chapter__title{font-family:var(--fd);font-weight:700;font-size:clamp(1.5rem,3.6vw,2.2rem);letter-spacing:-.01em}
+  .chapter__lede{color:var(--muted);font-size:.98rem;max-width:72ch;margin-bottom:1.6rem}
+  .chapter__rule{border:none;border-top:1px solid var(--line);margin:0 0 1.6rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem}
+  .card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:1.2rem 1.3rem;transition:border-color .2s,transform .18s,box-shadow .25s}
+  .card:hover{border-color:var(--lineb);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .card h4{font-family:var(--fd);font-weight:600;font-size:1.05rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+  .card h4::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--signal);flex-shrink:0}
+  .card--data h4::before{background:var(--data)}
+  .card--volt h4::before{background:var(--volt)}
+  .card p{font-size:.92rem;color:var(--muted)}
+  .card p strong{color:var(--paper);font-weight:500}
+  .card ul{margin-top:.6rem;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:.35rem}
+  .card li{font-size:.9rem;color:var(--muted);position:relative;padding-left:1.1rem}
+  .card li::before{content:"▹";position:absolute;left:0;color:var(--signal)}
+  .card--data li::before{color:var(--data)}
+
+  .term{font-family:var(--fm);font-size:.88em;color:var(--signal);background:rgba(79,227,193,.08);border:1px solid rgba(79,227,193,.25);border-radius:6px;padding:.02em .4em;white-space:nowrap}
+  .term--data{color:var(--data);background:rgba(108,140,255,.08);border-color:rgba(108,140,255,.28)}
+  .term--volt{color:var(--volt);background:rgba(255,200,87,.08);border-color:rgba(255,200,87,.28)}
+  .note{border:1px solid var(--lineb);border-left:4px solid var(--volt);border-radius:10px;background:rgba(255,200,87,.05);padding:.9rem 1.1rem;font-size:.92rem;color:var(--muted);margin:1.2rem 0}
+  .note strong{color:var(--volt);font-weight:600}
+
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);margin:1.2rem 0}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+  thead th{background:var(--panel2);font-family:var(--fd);font-weight:600;text-align:left;padding:.8rem 1rem;color:var(--paper);font-size:.88rem;border-bottom:1px solid var(--lineb);white-space:nowrap}
+  tbody td{padding:.7rem 1rem;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(79,227,193,.035)}
+  tbody td:first-child{color:var(--signal);font-family:var(--fm);font-size:.85rem;white-space:nowrap}
+  tbody td strong{color:var(--paper);font-weight:500}
+
+  .fact{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin:1.2rem 0}
+  .fact__item{border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;background:rgba(17,26,51,.45)}
+  .fact__item b{display:block;font-family:var(--fd);font-weight:700;font-size:1.35rem;color:var(--volt);line-height:1.2;margin-bottom:.3rem}
+  .fact__item span{font-size:.86rem;color:var(--muted)}
+
+  .exam{border:1px solid rgba(255,200,87,.32);border-left:4px solid var(--volt);border-radius:var(--radius);background:rgba(255,200,87,.05);padding:1.1rem 1.2rem;margin-top:1.7rem}
+  .exam__head{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+  .exam__tag{font-family:var(--fd);font-weight:700;font-size:.76rem;letter-spacing:.1em;color:var(--bg);background:var(--volt);border-radius:6px;padding:.14rem .55rem;white-space:nowrap}
+  .exam__title{font-family:var(--fd);font-weight:600;font-size:.92rem;color:var(--volt)}
+  .exam__item{border:1px solid var(--line);border-radius:10px;background:rgba(17,26,51,.6);padding:.85rem 1rem;margin-top:.65rem}
+  .exam__q{font-size:.9rem;color:var(--paper);margin-bottom:.35rem}
+  .exam__q b{color:var(--volt);font-weight:600}
+  .exam__a{font-size:.87rem;color:var(--muted)}
+  .exam__a strong{color:var(--signal);font-weight:600}
+
+  .footer{border-top:1px solid var(--line);background:var(--panel2)}
+  .footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.6rem 0 2rem;font-size:.85rem;color:var(--muted)}
+  .footer__brand{font-family:var(--fd);color:var(--signal);font-weight:600}
+
+  .totop{position:fixed;right:22px;bottom:22px;z-index:70;width:46px;height:46px;border-radius:12px;border:1px solid var(--lineb);background:var(--panel);color:var(--signal);font-size:1.2rem;cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s,background .2s,border-color .2s;box-shadow:var(--shadow)}
+  .totop.show{opacity:1;transform:none;pointer-events:auto}
+  .totop:hover{background:var(--signal);color:var(--bg);border-color:var(--signal)}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .mnav{display:none}
+  @media(max-width:920px){
+    .layout{grid-template-columns:1fr}
+    .toc{position:static;max-height:none;margin-bottom:1.4rem}
+    .toc__list{display:grid;grid-template-columns:1fr 1fr;gap:.1rem}
+    .topbar__links{display:none}
+    .mnav{display:inline-flex}
+    .hero__content{padding:3.6rem 0 3rem}
+  }
+  @media(max-width:560px){
+    .wrap{width:calc(100% - 28px)}
+    .toc__list{grid-template-columns:1fr}
+    .hero__stats{gap:.6rem}
+    .stat{min-width:104px;padding:.6rem .8rem}
+    .stat b{font-size:1.25rem}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .brand__dot,.hero__kick i{animation:none}
+    .reveal{opacity:1;transform:none;transition:none}
+    .card,.totop,.topbar__btn{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#top"><span class="brand__dot"></span> MATH NOTES <em>考研数学一知识全梳理</em></a>
+    <nav class="topbar__links" aria-label="快捷导航">
+      <a href="#ch1">高数</a><a href="#ch5">多元积分</a><a href="#ch6">级数</a><a href="#ch7">微分方程</a><a href="#ch8">线代</a><a href="#ch9">概率</a>
+    </nav>
+    <a class="topbar__btn mnav" href="#toc">目录</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <canvas class="hero__canvas" id="mathCanvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero__content">
+      <span class="hero__kick"><i></i> 单文件 · 零依赖 · 可离线阅读</span>
+      <h1 class="hero__title">考研数学一<span>全量考点</span>：高数·线代·概率一张通</h1>
+      <p class="hero__sub">按考纲主线整理九章全量知识点：函数极限、微分积分、级数与微分方程、线性代数、概率论与数理统计。每个考点给出定义、公式与记忆要点，章末附考研真题。</p>
+      <div class="hero__stats">
+        <div class="stat"><b>9</b><span>知识章节</span></div>
+        <div class="stat"><b>3</b><span>科目板块</span></div>
+        <div class="stat"><b>150</b><span>考纲分值</span></div>
+        <div class="stat"><b>∞</b><span>题海人生</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="layout">
+
+    <aside class="toc" id="toc">
+      <p class="toc__title">章节目录</p>
+      <div class="toc__list">
+        <a href="#ch1"><span class="toc__n">01</span> 函数、极限与连续</a>
+        <a href="#ch2"><span class="toc__n">02</span> 一元函数微分学</a>
+        <a href="#ch3"><span class="toc__n">03</span> 一元函数积分学</a>
+        <a href="#ch4"><span class="toc__n">04</span> 多元函数微分学</a>
+        <a href="#ch5"><span class="toc__n">05</span> 多元函数积分学</a>
+        <a href="#ch6"><span class="toc__n">06</span> 无穷级数</a>
+        <a href="#ch7"><span class="toc__n">07</span> 常微分方程</a>
+        <a href="#ch8"><span class="toc__n">08</span> 线性代数</a>
+        <a href="#ch9"><span class="toc__n">09</span> 概率论与数理统计</a>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- 01 -->
+      <section class="chapter reveal" id="ch1">
+        <div class="chapter__head"><span class="chapter__num">01</span><h2 class="chapter__title">函数、极限与连续</h2></div>
+        <p class="chapter__lede">极限是微积分的基石：所有导数、积分、级数都建立在极限之上。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>函数基础</h4>
+            <ul>
+              <li>基本初等函数：幂、指数、对数、三角、反三角、常数函数</li>
+              <li>复合函数、反函数、隐函数、参数方程表示</li>
+              <li>函数特性：奇偶性、周期性、单调性、有界性</li>
+              <li>反函数性质：单调函数必有反函数，图像关于 y=x 对称</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>极限定义与性质</h4>
+            <ul>
+              <li>ε-δ 定义、ε-N 定义（数列极限）</li>
+              <li>唯一性、有界性、保号性、四则运算法则</li>
+              <li>夹逼准则、单调有界准则（数列极限存在）</li>
+              <li>无穷小/无穷大：高阶、同阶、等价无穷小替换</li>
+              <li>常用等价：<span class="term">x→0</span> 时 sinx~x、tanx~x、ln(1+x)~x、e^x−1~x、1−cosx~x²/2</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>两个重要极限</h4>
+            <ul>
+              <li><strong>第一重要极限</strong>：<span class="term">lim sinx/x = 1</span>（x→0）</li>
+              <li><strong>第二重要极限</strong>：<span class="term">lim (1+1/x)^x = e</span>（x→∞）；lim (1+x)^(1/x) = e（x→0）</li>
+              <li>推广形式：lim (1+f(x))^(1/f(x)) = e（f(x)→0）</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>连续与间断</h4>
+            <ul>
+              <li>连续定义：lim f(x) = f(x₀)（x→x₀）</li>
+              <li>间断点分类：<span class="term">第一类</span>（可去/跳跃）、<span class="term">第二类</span>（无穷/振荡）</li>
+              <li>闭区间连续函数性质：最值定理、介值定理、零点定理</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>等价无穷小替换只能在乘除因子中使用；0/0 型极限优先考虑「等价替换 + 洛必达 + 泰勒」三板斧。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>求 lim(x→0) sinx / x 的值。</p><p class="exam__a"><strong>答案：1。</strong>这是第一重要极限，也可由 sinx~x（x→0）等价替换直接得出。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>求 lim(x→∞) (1 + 1/x)^x 的值。</p><p class="exam__a"><strong>答案：e。</strong>第二重要极限，底数趋于 1 且指数趋于无穷，标准形式 (1+1/x)^x → e。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>当 x→0 时，下列与 x 是等价无穷小的是？A. sinx  B. 1−cosx  C. x²  D. e^x</p><p class="exam__a"><strong>答案：A。</strong>sinx~x；1−cosx~x²/2（x 的二阶无穷小）；x² 是二阶；e^x 的等价无穷小是 e^x−1~x，e^x 本身趋于 1。</p></div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="chapter reveal" id="ch2">
+        <div class="chapter__head"><span class="chapter__num">02</span><h2 class="chapter__title">一元函数微分学</h2></div>
+        <p class="chapter__lede">导数刻画变化率，微分作线性近似；中值定理连接导数与函数形态。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>导数与微分</h4>
+            <ul>
+              <li>导数定义：f'(x₀) = lim [f(x₀+h)−f(x₀)]/h（h→0）</li>
+              <li>基本公式：(x^n)'=nx^(n−1)、(lnx)'=1/x、(e^x)'=e^x、(sinx)'=cosx</li>
+              <li>四则与复合：乘积法则、链式法则（内导乘外导）</li>
+              <li>隐函数求导、参数方程求导、对数求导法</li>
+              <li>微分：dy = f'(x)dx，可微⇔可导</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>中值定理</h4>
+            <ul>
+              <li><span class="term">罗尔定理</span>：端点值相等⇒存在 f'(ξ)=0</li>
+              <li><span class="term">拉格朗日中值定理</span>：f(b)−f(a)=f'(ξ)(b−a)</li>
+              <li><span class="term">柯西中值定理</span>：两个函数比值的推广形式</li>
+              <li>泰勒公式：f(x) 在 x₀ 处的多项式展开 + 余项（佩亚诺/拉格朗日余项）</li>
+              <li>洛必达法则：0/0、∞/∞ 型极限可对分子分母分别求导</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>导数应用</h4>
+            <ul>
+              <li>单调性：f'(x)&gt;0 单调递增，f'(x)&lt;0 单调递减</li>
+              <li>极值判定：f'(x₀)=0 且 f''(x₀)&lt;0 取极大；f''(x₀)&gt;0 取极小</li>
+              <li>凹凸性：f''(x)&gt;0 凹（下凸），f''(x)&lt;0 凸；拐点处 f'' 变号</li>
+              <li>渐近线：水平、垂直、斜渐近线判定</li>
+              <li>曲率：K=|y''|/(1+y'²)^(3/2)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>高阶导数与常见展开</h4>
+            <ul>
+              <li>e^x = Σ x^n/n!（n=0→∞），sinx、cosx 交错展开</li>
+              <li>ln(1+x) = x − x²/2 + x³/3 − …</li>
+              <li>(1+x)^α 二项式展开（α 任意实数）</li>
+              <li>莱布尼茨公式求高阶导数：(uv)^(n) 组合形式</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>证明题三件套——构造辅助函数用罗尔/拉格朗日；求极限优先洛必达前先看能否等价替换。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>设 y = x²·sinx，求 y'。</p><p class="exam__a"><strong>答案：y' = 2x·sinx + x²·cosx。</strong>乘积法则：(uv)' = u'v + uv'。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>设函数 f(x) 在 x₀ 处满足 f'(x₀)=0 且 f''(x₀)&gt;0，则 f(x₀) 是极大值还是极小值？</p><p class="exam__a"><strong>答案：极小值。</strong>f''(x₀)&gt;0 表示二阶导为正、曲线在该点附近下凸，一阶导从负变正，故为极小值。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【证明题】</b>写出拉格朗日中值定理的内容。</p><p class="exam__a"><strong>答案：</strong>若 f 在 [a,b] 连续、在 (a,b) 可导，则存在 ξ∈(a,b) 使 f(b)−f(a) = f'(ξ)(b−a)。</p></div>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="chapter reveal" id="ch3">
+        <div class="chapter__head"><span class="chapter__num">03</span><h2 class="chapter__title">一元函数积分学</h2></div>
+        <p class="chapter__lede">不定积分是微分的逆运算，定积分是和的极限（曲边梯形面积）。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>不定积分</h4>
+            <ul>
+              <li>基本公式：∫x^n dx = x^(n+1)/(n+1)+C、∫1/x dx = ln|x|+C、∫e^x dx = e^x+C</li>
+              <li>∫sinx dx = −cosx+C、∫cosx dx = sinx+C、∫1/(1+x²) dx = arctanx+C</li>
+              <li>换元法：第一类（凑微分）、第二类（三角/根式代换）</li>
+              <li>分部积分：∫u dv = uv − ∫v du，反对幂指三顺序</li>
+              <li>有理函数：部分分式分解后积分</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>定积分</h4>
+            <ul>
+              <li>定义：∫ₐᵇ f(x)dx = lim Σ f(ξᵢ)Δxᵢ（黎曼和）</li>
+              <li><span class="term">牛顿-莱布尼茨公式</span>：∫ₐᵇ f(x)dx = F(b)−F(a)</li>
+              <li>换元需变限，分部积分处理乘积型</li>
+              <li>奇偶性：奇函数对称区间积分为 0，偶函数为 2 倍半区间</li>
+              <li>周期函数积分：周期内积分与起点无关</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>反常积分与几何应用</h4>
+            <ul>
+              <li>无穷限反常积分：∫ₐ^∞，收敛判定（p-积分、比较判别法）</li>
+              <li>无界函数反常积分（瑕积分）</li>
+              <li>平面图形面积：∫|f−g| dx</li>
+              <li>旋转体体积：绕 x 轴 V=π∫y²dx、绕 y 轴壳层法 V=2π∫xy dx</li>
+              <li>弧长：s = ∫√(1+y'²) dx</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>变上限积分</h4>
+            <ul>
+              <li>Φ(x)=∫ₐˣ f(t)dt，则 Φ'(x)=f(x)（微积分基本定理）</li>
+              <li>变上限积分求导：被积函数含 x 时需拆项或换元</li>
+              <li>常用于求 0/0 型极限（结合洛必达）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>分部积分「反对幂指三」——反三角函数、对数、幂、指数、三角函数，谁先当 u 按此顺序。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>求 ∫₀¹ x dx 的值。</p><p class="exam__a"><strong>答案：1/2。</strong>∫₀¹ x dx = x²/2 |₀¹ = 1/2；几何意义为直角三角形面积。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>设 F(x)=∫₀ˣ t² dt，求 F'(x)。</p><p class="exam__a"><strong>答案：F'(x)=x²。</strong>变上限积分求导等于被积函数在上限处的值。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>奇函数 f(x) 在对称区间 [−a,a] 上的定积分等于多少？</p><p class="exam__a"><strong>答案：0。</strong>奇函数图像关于原点对称，正负面积抵消，∫₋ₐᵃ f(x)dx = 0。</p></div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="chapter reveal" id="ch4">
+        <div class="chapter__head"><span class="chapter__num">04</span><h2 class="chapter__title">多元函数微分学</h2></div>
+        <p class="chapter__lede">偏导数是固定其他变量求导；全微分是多元线性近似。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>偏导数与全微分</h4>
+            <ul>
+              <li>偏导数：∂z/∂x 固定 y 对 x 求导；∂z/∂y 固定 x 对 y 求导</li>
+              <li>高阶偏导：混合偏导 ∂²z/∂x∂y（连续条件下与顺序无关）</li>
+              <li>全微分：dz = (∂z/∂x)dx + (∂z/∂y)dy</li>
+              <li>可微⇒连续且偏导存在；偏导存在不一定可微</li>
+              <li>复合函数链式法则、隐函数求导公式</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>方向导数与梯度</h4>
+            <ul>
+              <li>方向导数：D_u f = ∂f/∂x·cosα + ∂f/∂y·cosβ</li>
+              <li><span class="term">梯度</span> grad f = (∂f/∂x, ∂f/∂y)</li>
+              <li>梯度方向是函数增长最快的方向，模为最大方向导数</li>
+              <li>等值线的法线方向即梯度方向</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>极值与条件极值</h4>
+            <ul>
+              <li>无条件极值必要条件：偏导均为 0（驻点）</li>
+              <li>判别法：AC−B² 判别（A=f_xx, B=f_xy, C=f_yy）</li>
+              <li><span class="term">拉格朗日乘数法</span>：约束 g(x,y)=0 下求极值，构造 F=f+λg</li>
+              <li>应用题：最大最小体积、面积、利润</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>AC−B²&gt;0 且 A&gt;0 极小、A&lt;0 极大；AC−B²&lt;0 非极值；=0 需另判。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>设 z = x²y，求 ∂z/∂x 与 ∂z/∂y。</p><p class="exam__a"><strong>答案：∂z/∂x = 2xy，∂z/∂y = x²。</strong>求 ∂z/∂x 时把 y 当常数；求 ∂z/∂y 时把 x 当常数。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>函数 z=f(x,y) 在点 (x₀,y₀) 处的全微分 dz 的表达式是什么？</p><p class="exam__a"><strong>答案：dz = f_x(x₀,y₀)dx + f_y(x₀,y₀)dy。</strong>其中 f_x、f_y 为该点偏导数。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【选择题】</b>梯度向量指向函数值什么方向？</p><p class="exam__a"><strong>答案：增长最快的方向。</strong>梯度 grad f 的方向是函数在该点上升最快的方向，其模等于最大方向导数。</p></div>
+        </div>
+      </section>
+
+      <!-- 05 -->
+      <section class="chapter reveal" id="ch5">
+        <div class="chapter__head"><span class="chapter__num">05</span><h2 class="chapter__title">多元函数积分学</h2></div>
+        <p class="chapter__lede">二重积分、曲线/曲面积分，以及格林、高斯、斯托克斯三大公式。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>二重积分</h4>
+            <ul>
+              <li>定义：曲顶柱体体积，化累次积分（X 型/ Y 型）</li>
+              <li>极坐标：x=rcosθ, y=rsinθ，dσ = r dr dθ</li>
+              <li>对称性：关于 x/y 轴对称、奇偶函数简化</li>
+              <li>应用：平面区域面积、薄板质量/质心</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>曲线积分</h4>
+            <ul>
+              <li>第一类（对弧长）：∫_L f ds，与方向无关</li>
+              <li>第二类（对坐标）：∫_L P dx + Q dy，与方向有关</li>
+              <li><span class="term">格林公式</span>：平面闭曲线积分 ⇔ 二重积分（∂Q/∂x − ∂P/∂y）</li>
+              <li>积分与路径无关：∂P/∂y = ∂Q/∂x，此时存在势函数</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>曲面积分与三大公式</h4>
+            <ul>
+              <li>第一类曲面积分：∫∫_Σ f dS（与侧无关）</li>
+              <li>第二类曲面积分：∫∫_Σ P dydz + Q dzdx + R dxdy（有向）</li>
+              <li><span class="term">高斯公式</span>：闭曲面通量 ⇔ 三重积分散度</li>
+              <li><span class="term">斯托克斯公式</span>：空间曲线环流 ⇔ 曲面积分旋度</li>
+              <li>三重积分：直角/柱面/球面坐标</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>格林管平面、高斯管闭合曲面、斯托克斯管空间曲线——三大公式本质是「边界积分 ⇔ 内部积分」。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>计算二重积分 ∬_D 1 dσ，其中 D 为矩形 [0,1]×[0,1]。</p><p class="exam__a"><strong>答案：1。</strong>∬_D 1 dσ = ∫₀¹∫₀¹ dx dy = 1，即区域面积。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>格林公式沟通了哪两类积分？</p><p class="exam__a"><strong>答案：</strong>平面闭曲线上的第二类曲线积分与闭曲线所围区域上的二重积分：∮_L Pdx+Qdy = ∬_D (∂Q/∂x−∂P/∂y)dσ。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>高斯公式的物理意义是什么？</p><p class="exam__a"><strong>答案：</strong>闭曲面上的通量等于其内部区域的散度体积分（三重积分）：∯_Σ P dydz+Q dzdx+R dxdy = ∭_V (∂P/∂x+∂Q/∂y+∂R/∂z)dV。</p></div>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section class="chapter reveal" id="ch6">
+        <div class="chapter__head"><span class="chapter__num">06</span><h2 class="chapter__title">无穷级数</h2></div>
+        <p class="chapter__lede">数项级数判敛散，幂级数求和与展开，傅里叶级数处理周期函数。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>数项级数敛散性</h4>
+            <ul>
+              <li>几何级数 Σqⁿ：|q|&lt;1 收敛，|q|≥1 发散</li>
+              <li><span class="term">p-级数</span> Σ1/nᵖ：p&gt;1 收敛，p≤1 发散</li>
+              <li>正项级数：比较、比值、根值判别法</li>
+              <li>交错级数：<span class="term">莱布尼茨判别法</span>（单调递减趋于 0 则收敛）</li>
+              <li>绝对收敛 ⇔ 原级数与绝对值级数均收敛；条件收敛：原收敛绝对值发散</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>幂级数</h4>
+            <ul>
+              <li>收敛半径：R = 1/limsup ⁿ√|aₙ| 或比值法</li>
+              <li>收敛域：端点 x=±R 需单独判定</li>
+              <li>和函数：逐项求导/积分，先求和再处理系数</li>
+              <li>常用展开：e^x、sinx、cosx、ln(1+x)、1/(1−x)=Σxⁿ（|x|&lt;1）</li>
+              <li>泰勒展开与麦克劳林展开的关系</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>傅里叶级数</h4>
+            <ul>
+              <li>周期函数展开：f(x) ~ a₀/2 + Σ(aₙcos nx + bₙsin nx)</li>
+              <li>系数公式：aₙ、bₙ 由定积分计算</li>
+              <li>奇函数只有正弦项，偶函数只有余弦项（含 a₀）</li>
+              <li>收敛定理：连续点收敛于 f(x)，间断点收敛于左右极限平均</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>判敛顺序：先看通项是否趋于 0（不趋于必发散）→ 正项用比值/根值/比较 → 交错用莱布尼茨。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>判断级数 Σ(1/2)ⁿ（n=1→∞）是否收敛，若收敛求其和。</p><p class="exam__a"><strong>答案：收敛，和为 1。</strong>几何级数公比 q=1/2，|q|&lt;1 收敛，和 = a/(1−q) = (1/2)/(1−1/2) = 1。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【判断题】</b>p-级数 Σ1/nᵖ 在什么条件下收敛？</p><p class="exam__a"><strong>答案：p&gt;1 收敛。</strong>p&gt;1 收敛；p=1 为调和级数发散；p&lt;1 发散。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>交错级数 Σ(−1)ⁿ⁺¹ aₙ（aₙ&gt;0）满足什么条件时收敛？</p><p class="exam__a"><strong>答案：</strong>莱布尼茨判别法：aₙ 单调递减且趋于 0，则交错级数收敛。</p></div>
+        </div>
+      </section>
+
+      <!-- 07 -->
+      <section class="chapter reveal" id="ch7">
+        <div class="chapter__head"><span class="chapter__num">07</span><h2 class="chapter__title">常微分方程</h2></div>
+        <p class="chapter__lede">解方程的核心是识别类型：可分离、一阶线性、二阶常系数、欧拉方程。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>一阶方程</h4>
+            <ul>
+              <li><span class="term">可分离变量</span>：dy/dx = f(x)g(y)，两边分别积分</li>
+              <li><span class="term">齐次方程</span>：dy/dx = φ(y/x)，令 u=y/x 代换</li>
+              <li><span class="term">一阶线性</span>：y'+P(x)y = Q(x)，通解 y = e^{−∫P dx}[∫Q e^{∫P dx} dx + C]</li>
+              <li>伯努利方程：y'+P y = Q yⁿ，令 z=y^(1−n) 化线性</li>
+              <li>全微分方程：∂P/∂y=∂Q/∂x 时求原函数</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>二阶常系数线性方程</h4>
+            <ul>
+              <li>齐次：y''+py'+qy=0，特征方程 r²+pr+q=0</li>
+              <li>两不等实根 r₁≠r₂：y=C₁e^{r₁x}+C₂e^{r₂x}</li>
+              <li>重根 r：y=(C₁+C₂x)e^{rx}</li>
+              <li>共轭复根 α±βi：y=e^{αx}(C₁cosβx+C₂sinβx)</li>
+              <li>非齐次：通解 = 齐次通解 + 特解（待定系数法/常数变易法）</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>高阶与特殊方程</h4>
+            <ul>
+              <li>可降阶：缺 y 型 y''=f(x,y')（令 p=y'）；缺 x 型</li>
+              <li><span class="term">欧拉方程</span>：x²y''+pxy'+qy=0，令 x=e^t 化常系数</li>
+              <li>应用：弹簧振动（自由/强迫）、RC 电路、人口模型</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>二阶常系数齐次通解三情形，完全由特征方程判别式决定：Δ&gt;0 两实根、Δ=0 重根、Δ&lt;0 复根。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>求微分方程 y'' + y = 0 的通解。</p><p class="exam__a"><strong>答案：y = C₁cosx + C₂sinx。</strong>特征方程 r²+1=0，特征根 r=±i（α=0, β=1），故通解为 C₁cosx+C₂sinx。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>求一阶线性方程 y' + y = 0 的通解。</p><p class="exam__a"><strong>答案：y = Ce^(−x)。</strong>可分离变量：dy/y = −dx，两边积分得 ln|y| = −x + C。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>特征方程 r² − 3r + 2 = 0 对应齐次方程的通解形式？</p><p class="exam__a"><strong>答案：y = C₁e^x + C₂e^(2x)。</strong>特征根 r=1,2 为两不等实根，通解按 e^{r₁x}、e^{r₂x} 组合。</p></div>
+        </div>
+      </section>
+
+      <!-- 08 -->
+      <section class="chapter reveal" id="ch8">
+        <div class="chapter__head"><span class="chapter__num">08</span><h2 class="chapter__title">线性代数</h2></div>
+        <p class="chapter__lede">行列式、矩阵、向量组、线性方程组、特征值与二次型——五章一线牵。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>行列式与矩阵</h4>
+            <ul>
+              <li>2 阶行列式：|a b; c d| = ad − bc；按行/列展开（代数余子式）</li>
+              <li>矩阵运算：加法、数乘、乘法（不满足交换律）、转置</li>
+              <li>逆矩阵：AA⁻¹=E；A⁻¹ = A*/|A|（伴随矩阵）</li>
+              <li>初等变换与初等矩阵；矩阵的秩 r(A)</li>
+              <li>分块矩阵运算</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>向量组与方程组</h4>
+            <ul>
+              <li>线性相关/无关：存在不全为零系数使组合为零向量则相关</li>
+              <li>秩：极大无关组中向量个数；r(A)=列向量组秩=行向量组秩</li>
+              <li>方程组 Ax=b 有解 ⇔ r(A)=r(A|b)；唯一解 ⇔ r(A)=n</li>
+              <li>齐次 Ax=0 基础解系：解空间维数 = n − r(A)</li>
+              <li>克拉默法则：|A|≠0 时唯一解</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>特征值与二次型</h4>
+            <ul>
+              <li>特征方程：|λE − A| = 0；特征向量满足 Aα = λα</li>
+              <li>性质：特征值之和 = 迹 tr(A)，之积 = |A|</li>
+              <li>相似对角化：A 可对角化 ⇔ 有 n 个线性无关特征向量</li>
+              <li>实对称矩阵：必可正交对角化，不同特征值特征向量正交</li>
+              <li>二次型 xᵀAx：标准形（配方法/正交变换）、正定判定（顺序主子式&gt;0）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>λ 的三大线索：对角线之和（迹）、行列式、|λE−A|=0；实对称矩阵是考研线代的高频主角。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>计算行列式 |3 1; 2 4|。</p><p class="exam__a"><strong>答案：10。</strong>3×4 − 1×2 = 12 − 2 = 10。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>矩阵 A = [[2,0],[0,3]] 的特征值是多少？</p><p class="exam__a"><strong>答案：λ₁=2，λ₂=3。</strong>对角矩阵的特征值即主对角线元素；也可由 |λE−A|=(λ−2)(λ−3)=0 得出。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>n 元齐次线性方程组 Ax=0 有非零解的充要条件是什么？</p><p class="exam__a"><strong>答案：r(A) &lt; n。</strong>系数矩阵的秩小于未知量个数时，基础解系含 n−r(A) 个解向量，必有非零解。</p></div>
+        </div>
+      </section>
+
+      <!-- 09 -->
+      <section class="chapter reveal" id="ch9">
+        <div class="chapter__head"><span class="chapter__num">09</span><h2 class="chapter__title">概率论与数理统计</h2></div>
+        <p class="chapter__lede">随机事件的概率、随机变量的分布、数字特征、大数定律与统计推断。</p>
+        <hr class="chapter__rule">
+        <div class="grid2">
+          <div class="card">
+            <h4>随机事件与概率</h4>
+            <ul>
+              <li>古典概型：P(A)=有利/总；几何概型</li>
+              <li>条件概率：P(A|B)=P(AB)/P(B)</li>
+              <li><span class="term">全概率公式</span>：P(A)=ΣP(Bᵢ)P(A|Bᵢ)</li>
+              <li><span class="term">贝叶斯公式</span>：P(Bᵢ|A)=P(Bᵢ)P(A|Bᵢ)/P(A)</li>
+              <li>事件独立：P(AB)=P(A)P(B)</li>
+            </ul>
+          </div>
+          <div class="card card--data">
+            <h4>随机变量及其分布</h4>
+            <ul>
+              <li>离散型：0-1 分布、二项 B(n,p)、泊松 P(λ)、几何分布</li>
+              <li>连续型：均匀 U(a,b)、指数 Exp(λ)、<span class="term">正态 N(μ,σ²)</span></li>
+              <li>分布函数 F(x)=P(X≤x)，密度 f(x)=F'(x)</li>
+              <li>标准化：Z=(X−μ)/σ ~ N(0,1)</li>
+              <li>二维随机变量：联合分布、边缘分布、条件分布、独立性</li>
+            </ul>
+          </div>
+          <div class="card card--volt">
+            <h4>数字特征与大数定律</h4>
+            <ul>
+              <li>期望 E(X)=Σxᵢpᵢ（离散）/ ∫xf(x)dx（连续）</li>
+              <li>性质：E(aX+b)=aE(X)+b；E(X+Y)=E(X)+E(Y)</li>
+              <li>方差 D(X)=E(X²)−[E(X)]²；D(aX+b)=a²D(X)</li>
+              <li>协方差与相关系数 ρ=Cov(X,Y)/√(DXDY)</li>
+              <li><span class="term">大数定律</span>：样本均值依概率收敛于期望；<span class="term">中心极限定理</span>：大量独立同分布变量和近似正态</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>数理统计</h4>
+            <ul>
+              <li>总体、样本、统计量：样本均值 X̄、样本方差 S²</li>
+              <li>χ²、t、F 三大分布及抽样分布定理</li>
+              <li><span class="term">参数估计</span>：矩估计、最大似然估计（无偏性、有效性）</li>
+              <li><span class="term">假设检验</span>：显著性水平 α、拒绝域、两类错误</li>
+              <li>置信区间：正态总体均值的区间估计</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note"><strong>记忆点：</strong>贝叶斯 = 先验 × 似然 / 全概率分母；正态标准化 Z=(X−μ)/σ 是几乎所有正态计算的入口。</div>
+        <div class="exam">
+          <div class="exam__head"><span class="exam__tag">考研真题</span><span class="exam__title">本章典型真题与解析</span></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>设随机变量 X~N(0,1)，写出其标准化形式及密度函数形式要点。</p><p class="exam__a"><strong>答案：</strong>标准正态 N(0,1) 密度 f(x)=(1/√(2π))e^(−x²/2)；一般 X~N(μ,σ²) 通过 Z=(X−μ)/σ 化为标准正态。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【计算题】</b>设 E(X)=2，D(X)=3，求 E(3X+1) 与 D(3X+1)。</p><p class="exam__a"><strong>答案：E=7，D=27。</strong>E(3X+1)=3×2+1=7；D(3X+1)=3²×3=27（方差平移不变、缩放取平方）。</p></div>
+          <div class="exam__item"><p class="exam__q"><b>【概念题】</b>写出全概率公式。</p><p class="exam__a"><strong>答案：</strong>若 B₁,…,Bₙ 构成完备事件组（互斥且并集为全空间），则 P(A)=ΣP(Bᵢ)P(A|Bᵢ)。</p></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span class="footer__brand">MATH NOTES</span>
+    <span>考研数学一知识点全梳理 </span>
+    <span>极限即起点，积分即累积</span>
+  </div>
+</footer>
+
+<button class="totop" id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('mathCanvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, nodes = [], packets = [];
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function seed(){
+    var count = Math.round(W / 130);
+    nodes = [];
+    for(var i=0;i<count;i++){ nodes.push({x:Math.random()*W, y:Math.random()*H, r:2.5+Math.random()*3}); }
+    packets = [];
+    for(var i=0;i<Math.min(count, 14);i++){ spawnPacket(true); }
+  }
+  function spawnPacket(immediate){
+    var a = nodes[Math.floor(Math.random()*nodes.length)];
+    var b = nodes[Math.floor(Math.random()*nodes.length)];
+    if(a===b) return spawnPacket(immediate);
+    packets.push({a:a, b:b, t:immediate?Math.random():0, speed:.002+Math.random()*.004, hue:Math.random()<.5?0:1});
+  }
+  function resize(){
+    var rect = canvas.parentElement.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var i;
+    for(i=0;i<nodes.length;i++){ var n=nodes[i]; ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='rgba(108,140,255,.35)'; ctx.fill(); }
+    for(i=0;i<packets.length;i++){
+      var p=packets[i]; p.t+=p.speed;
+      if(p.t>=1){ packets.splice(i,1); i--; spawnPacket(false); continue; }
+      var x=p.a.x+(p.b.x-p.a.x)*p.t, y=p.a.y+(p.b.y-p.a.y)*p.t;
+      var c=p.hue===0?'79,227,193':'108,140,255';
+      ctx.beginPath(); ctx.arc(x,y,2.5,0,Math.PI*2); ctx.fillStyle='rgba('+c+',.9)'; ctx.fill();
+      ctx.shadowBlur=8; ctx.shadowColor='rgba('+c+',.7)';
+    }
+    ctx.shadowBlur=0;
+    requestAnimationFrame(draw);
+  }
+  if(!reduce){ resize(); window.addEventListener('resize', resize); requestAnimationFrame(draw); }
+  else {
+    var rect=canvas.parentElement.getBoundingClientRect();
+    W=rect.width; H=rect.height;
+    canvas.width=W*DPR; canvas.height=H*DPR;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    seed();
+    for(var i=0;i<nodes.length;i++){ var n=nodes[i]; ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='rgba(108,140,255,.3)'; ctx.fill(); }
+  }
+
+  var tocLinks = document.querySelectorAll('.toc a');
+  var sections = [];
+  tocLinks.forEach(function(a){ sections.push(document.querySelector(a.getAttribute('href'))); });
+  var toTop = document.getElementById('toTop');
+  var ticking = false;
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(function(){
+        ticking = false;
+        var pos = window.scrollY + 120;
+        var current = sections[0];
+        sections.forEach(function(s){ if(s.offsetTop <= pos) current = s; });
+        tocLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current.id); });
+        toTop.classList.toggle('show', window.scrollY > 600);
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: reduce?'auto':'smooth'}); });
+  onScroll();
+
+  var reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.08});
+    reveals.forEach(function(el){ io.observe(el); });
+  } else { reveals.forEach(function(el){ el.classList.add('in'); }); }
+})();
+</script>
+</body>
+</html>
